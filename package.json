@@ -1,0 +1,21 @@
+{
+  "name": "ynab-lambda",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "package": "yarn run build && zip -r ./dist/package.zip ./dist/index.js",
+    "build": "webpack --config=webpack.config.js"
+  },
+  "dependencies": {
+    "@types/aws-lambda": "^8.10.51",
+    "@types/node": "^13.13.4",
+    "@types/papaparse": "^5.0.3",
+    "papaparse": "^5.2.0",
+    "ts-loader": "^7.0.1",
+    "typescript": "^3.8.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "ynab": "^1.19.0"
+  }
+}
