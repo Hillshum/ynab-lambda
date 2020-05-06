@@ -24,6 +24,12 @@ const ynab = {
               deleted: false
             },
             {
+              id: 'gm-retirement-transfer-id',
+              name: 'Transfer: RBFCU Checking',
+              transfer_account_id: 'fake-gm-retirement-account',
+              deleted: false
+            },
+            {
               "id": "nyc-food-week-id",
               "name": "NYC Food week",
               "transfer_account_id": null,

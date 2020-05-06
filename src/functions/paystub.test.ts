@@ -14,8 +14,11 @@ mockedParse.mockImplementation(()=> {
     taxes: 35.335,
     hsa: 34.35,
     health: 893,
-    retirement: 1.2,
-    net: 83
+    retirement: 12,
+    net: 83,
+    retirement_gm: 0,
+    retirement_total: 0,
+    
   }
 });
 
@@ -87,6 +90,20 @@ const stub = `
     date: '2020-03-21',
     memo: 'Net paycheck'
     
+  },
+  {
+    amount: 24000,
+    payee_name: 'General Motors',
+    date: '2020-03-21',
+    account_id: 'fake-withholdings-account',
+    memo: '401(k) contribution'
+  },
+  {
+    amount: -36000,
+    payee_id: 'gm-retirement-transfer-id',
+    date: '2020-03-21',
+    account_id: 'fake-withholdings-account',
+    memo: 'Retirement savings'
   }
 ]
 

@@ -5,7 +5,7 @@ import * as ynab from "ynab";
 import { api, payeeManager } from '../utils/api';
 
 
-import { WITHHOLDINGS_ID, BUDGET_ID, RBFCU_CHECKING_ID } from "../utils/constants";
+import { WITHHOLDINGS_ID, BUDGET_ID, RBFCU_CHECKING_ID, GM_RETIREMENT_ACCOUNT_ID } from "../utils/constants";
 
 type Direction = 'inflow' | 'outflow';
 
@@ -74,6 +74,32 @@ const transactionRows: TransactionDetails[] = [
   },
 ]
 
+interface CalculatedTransaction {
+  details: TransactionDetails
+  calculate: (amounts: Record<TransactionType, number>) => number
+}
+
+const calculatedTransactions: CalculatedTransaction[] = [
+  {
+    details: {
+      name: 'retirement_gm',
+      payeeName: 'General Motors',
+      direction: 'inflow',
+      memo: '401(k) contribution',
+    },
+    calculate: (amounts) => amounts.retirement * 2
+  },
+  {
+    details: {
+      name: 'retirement_total',
+      payeeTransferId: GM_RETIREMENT_ACCOUNT_ID,
+      direction: 'outflow',
+      memo: 'Retirement savings',
+    },
+    calculate: (amounts) => amounts.retirement * 3
+  }
+]
+
 
 export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResult> => {
 
@@ -99,9 +125,29 @@ export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResul
 
   }))
 
+  const calculated: ynab.SaveTransaction[] = await Promise.all(calculatedTransactions.map(async (transaction) => {
+    const preparedTransaction: ynab.SaveTransaction = {
+      amount: transaction.calculate(amounts) * 1000 * directionMultipliers[transaction.details.direction],
+      account_id: WITHHOLDINGS_ID,
+      date: ynab.utils.getCurrentDateInISOFormat(),
+      memo: transaction.details.memo,
+
+    }
+    if (isTransfer(transaction.details)) {
+      preparedTransaction.payee_id = await payeeManager.getTransferPayee(transaction.details.payeeTransferId)
+    }
+
+    if (isNamedPayee(transaction.details)) {
+      preparedTransaction.payee_name = transaction.details.payeeName;
+    }
+
+    return preparedTransaction;
+  }))
 
 
-  await api.transactions.createTransactions(BUDGET_ID, {transactions: newTransactions});
+  
+
+  await api.transactions.createTransactions(BUDGET_ID, {transactions: [...newTransactions, ...calculated]});
   return {
     statusCode: 200,
     body: 'success',

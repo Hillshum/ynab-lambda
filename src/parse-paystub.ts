@@ -10,7 +10,7 @@ const regex = {
 
 }
 
-export type TransactionType = 'gross' | 'taxes' | 'hsa' | 'health' | 'retirement' | 'net'
+export type TransactionType = 'gross' | 'taxes' | 'hsa' | 'health' | 'retirement' | 'net' | 'retirement_gm' | 'retirement_total'
 
 type ParsedStub = Record<TransactionType, number>
 
