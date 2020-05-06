@@ -10,15 +10,9 @@ const regex = {
 
 }
 
-interface ParsedStub {
-  gross: number,
-  taxes: number,
-  hsa: number,
-  health: number,
-  retirement: number,
-  postTax: number,
-  net: number,
-}
+export type TransactionType = 'gross' | 'taxes' | 'hsa' | 'health' | 'retirement' | 'net'
+
+type ParsedStub = Record<TransactionType, number>
 
 const checkRegex = (regex: RegExp, corpus: string) => {
   const match = corpus.match(regex);
