@@ -29,6 +29,7 @@ const mockedApi = mocked(api, false);
 
 
 import paystubHandler from './paystub';
+import { SaveTransaction } from "ynab";
 
 
 const stub = `
@@ -49,12 +50,13 @@ const stub = `
 
  `
 
- const transactionsToUpload = [
+ const transactionsToUpload: SaveTransaction[] = [
   {
     amount: 515000,
     account_id: 'fake-withholdings-account',
     date: '2020-03-21',
     memo: 'Gross Pay',
+    payee_name: 'General Motors',
 
   },
   {
@@ -62,18 +64,29 @@ const stub = `
     account_id: 'fake-withholdings-account',
     memo: 'All deducted taxes',
     date: '2020-03-21',
+    payee_name: 'Internal Revenue Service',
   },
   {
     amount: -34350,
     account_id: 'fake-withholdings-account',
     date: '2020-03-21',
     memo: 'Regular deduction',
+    payee_name: 'HSA',
   },
   {
     amount: -893000,
     account_id: 'fake-withholdings-account',
     memo: 'Health premium',
     date: '2020-03-21',
+    payee_name: 'Aetna'
+  },
+  {
+    amount: -83000,
+    account_id: 'fake-withholdings-account',
+    payee_id: 'rbfcu-checking-transfer-id',
+    date: '2020-03-21',
+    memo: 'Net paycheck'
+    
   }
 ]
 
