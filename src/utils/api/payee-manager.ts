@@ -28,11 +28,15 @@ export default class PayeeManager {
   async getTransferPayee(accountId: string){
   const payees = await this.getCached();
 
-  return payees.data.payees.filter(payee => {
+  const payee = payees.data.payees.filter(payee => {
     return !payee.deleted;
   }).find(payee => {
     return payee.transfer_account_id === accountId;
-  })?.id;
+  });
 
+  if (payee) {
+    return payee.id;
+  }
+  throw new Error(`Could not find transfer payee for account ${accountId}`)
   }
 }

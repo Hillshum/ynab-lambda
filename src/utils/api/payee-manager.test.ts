@@ -17,6 +17,10 @@ test('should correctly get the transfer payee', async ()=> {
   expect(await manager.getTransferPayee('venmo-account-id')).toBe('venmo-transfer-id')
 })
 
+test('should throw if the transfer payee cannot be found', async ()=> {
+  await expect(manager.getTransferPayee('this id does not exist')).rejects.toThrow()
+})
+
 test('should only call the YNAB api once for a number of sequential requests', async ()=> {
   await manager.getTransferPayee('venmo-account-id');
   await manager.getTransferPayee('venmo-account-id');
