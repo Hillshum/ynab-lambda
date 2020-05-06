@@ -1,7 +1,7 @@
 import * as ynab from 'ynab';
 
-import { ACCESS_TOKEN, BUDGET_ID } from './constants'
-import { Transaction } from './csv';
+import { ACCESS_TOKEN, BUDGET_ID } from '../constants'
+import { Transaction } from '../csv';
 
 
 export const api = new ynab.API(ACCESS_TOKEN)

@@ -2,7 +2,7 @@ import { APIGatewayProxyResult } from "aws-lambda";
 import { parsePaystub, TransactionType } from "../parse-paystub";
 import * as ynab from "ynab";
 
-import { api } from '../utils/api';
+import { api } from '../utils/api/api';
 
 
 import { WITHHOLDINGS_ID, BUDGET_ID } from "../utils/constants";

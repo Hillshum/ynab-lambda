@@ -1,7 +1,7 @@
 import { Handler, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
 import { VENMO_ID } from '../utils/constants'
-import * as api from '../utils/api'
+import * as api from '../utils/api/api'
 import { parse } from '../utils/csv';
 import { SaveTransactionsResponse } from 'ynab';
 

@@ -19,9 +19,9 @@ mockedParse.mockImplementation(()=> {
   }
 });
 
-import { api } from "../utils/api";
+import { api } from '../utils/api/api';
 
-jest.mock('../utils/api.ts');
+jest.mock('../utils/api/api.ts');
 
 
 
