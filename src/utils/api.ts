@@ -25,3 +25,13 @@ export const postTransactions = (transactions: Transaction[], accountId: string)
 
   return api.transactions.createTransaction(BUDGET_ID, {transactions: formateted});
 }
+
+export const getTransferPayee = async (accountId: string) => {
+  const payees = await api.payees.getPayees(BUDGET_ID);
+
+  return payees.data.payees.filter(payee => {
+    return !payee.deleted;
+  }).find(payee => {
+    return payee.transfer_account_id === accountId;
+  })?.id;
+}
