@@ -7,4 +7,5 @@ export default (func: (body: string)=>Promise<APIGatewayProxyResult>) =>{
     }
     return func(event.body);
   }
+  return handler;
 }
