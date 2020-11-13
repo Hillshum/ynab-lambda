@@ -14,7 +14,7 @@ mockedParse.mockImplementation(()=> {
     taxes: 35.335,
     hsa: 34.35,
     health: 893,
-    retirement: 12,
+    retirement: 122.76,
     net: 83,
     retirement_gm: 0,
     retirement_total: 0,
@@ -45,7 +45,7 @@ const stub = `
 *HEALTH CARE
 -$16.50
 *RSP PRE-TAX BASIC
--$94.07
+-$122.76
  EE Benefits Post-Tax Deductions$0.00
  Employee Deductions$0.00
  Net Pay$2,010.37
@@ -92,14 +92,14 @@ const stub = `
     
   },
   {
-    amount: 24000,
+    amount: 245520,
     payee_name: 'General Motors',
     date: '2020-03-21',
     account_id: 'fake-withholdings-account',
     memo: '401(k) contribution'
   },
   {
-    amount: -36000,
+    amount: -368280,
     payee_id: 'gm-retirement-transfer-id',
     date: '2020-03-21',
     account_id: 'fake-withholdings-account',

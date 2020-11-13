@@ -103,54 +103,67 @@ const calculatedTransactions: CalculatedTransaction[] = [
 
 export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResult> => {
 
-  const amounts = parsePaystub(stub);
+  try {
 
-  const newTransactions: ynab.SaveTransaction[] = await Promise.all(transactionRows.map(async transaction => {
-    const preparedTransaction: ynab.SaveTransaction = {
-      amount: amounts[transaction.name] * 1000 * directionMultipliers[transaction.direction],
-      account_id: WITHHOLDINGS_ID,
-      date: ynab.utils.getCurrentDateInISOFormat(),
-      memo: transaction.memo,
+    const amounts = parsePaystub(stub);
 
+    const newTransactions: ynab.SaveTransaction[] = await Promise.all(transactionRows.map(async transaction => {
+      const preparedTransaction: ynab.SaveTransaction = {
+        amount: amounts[transaction.name] * 1000 * directionMultipliers[transaction.direction],
+        account_id: WITHHOLDINGS_ID,
+        date: ynab.utils.getCurrentDateInISOFormat(),
+        memo: transaction.memo,
+
+      }
+      if (isTransfer(transaction)) {
+        preparedTransaction.payee_id = await payeeManager.getTransferPayee(transaction.payeeTransferId)
+      }
+
+      if (isNamedPayee(transaction)) {
+        preparedTransaction.payee_name = transaction.payeeName;
+      }
+
+      return preparedTransaction;
+
+    }))
+
+    const calculated: ynab.SaveTransaction[] = await Promise.all(calculatedTransactions.map(async (transaction) => {
+      const preparedTransaction: ynab.SaveTransaction = {
+        amount: Math.round(transaction.calculate(amounts) * 1000 * directionMultipliers[transaction.details.direction]),
+        account_id: WITHHOLDINGS_ID,
+        date: ynab.utils.getCurrentDateInISOFormat(),
+        memo: transaction.details.memo,
+
+      }
+      if (isTransfer(transaction.details)) {
+        preparedTransaction.payee_id = await payeeManager.getTransferPayee(transaction.details.payeeTransferId)
+      }
+
+      if (isNamedPayee(transaction.details)) {
+        preparedTransaction.payee_name = transaction.details.payeeName;
+      }
+
+      return preparedTransaction;
+    }))
+
+
+    await api.transactions.createTransactions(BUDGET_ID, {transactions: [...newTransactions, ...calculated]});
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+      body: 'success',
     }
-    if (isTransfer(transaction)) {
-      preparedTransaction.payee_id = await payeeManager.getTransferPayee(transaction.payeeTransferId)
+  } catch (e) {
+    console.error(e);
+    return {
+      statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+      body: 'error'
     }
-
-    if (isNamedPayee(transaction)) {
-      preparedTransaction.payee_name = transaction.payeeName;
-    }
-
-    return preparedTransaction;
-
-  }))
-
-  const calculated: ynab.SaveTransaction[] = await Promise.all(calculatedTransactions.map(async (transaction) => {
-    const preparedTransaction: ynab.SaveTransaction = {
-      amount: transaction.calculate(amounts) * 1000 * directionMultipliers[transaction.details.direction],
-      account_id: WITHHOLDINGS_ID,
-      date: ynab.utils.getCurrentDateInISOFormat(),
-      memo: transaction.details.memo,
-
-    }
-    if (isTransfer(transaction.details)) {
-      preparedTransaction.payee_id = await payeeManager.getTransferPayee(transaction.details.payeeTransferId)
-    }
-
-    if (isNamedPayee(transaction.details)) {
-      preparedTransaction.payee_name = transaction.details.payeeName;
-    }
-
-    return preparedTransaction;
-  }))
-
-
-  
-
-  await api.transactions.createTransactions(BUDGET_ID, {transactions: [...newTransactions, ...calculated]});
-  return {
-    statusCode: 200,
-    body: 'success',
   }
 }
 
