@@ -9,7 +9,7 @@ const ynab = {
       createTransactions: jest.fn(),
     }
     payees = {
-      getPayees: jest.fn((): PayeesResponse=> {
+      getPayees: jest.fn((): Promise<PayeesResponse>=> {
             const payees: Payee[] =[
             {
               "id": "venmo-transfer-id",
@@ -39,12 +39,12 @@ const ynab = {
 
 
 
-        return {
+        return Promise.resolve({
           data: {
             payees,
             server_knowledge: 54,
           }
-        };
+        });
       })
     }
   }

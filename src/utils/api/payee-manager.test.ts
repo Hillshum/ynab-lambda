@@ -20,19 +20,3 @@ test('should correctly get the transfer payee', async ()=> {
 test('should throw if the transfer payee cannot be found', async ()=> {
   await expect(manager.getTransferPayee('this id does not exist')).rejects.toThrow()
 })
-
-test('should only call the YNAB api once for a number of sequential requests', async ()=> {
-  await manager.getTransferPayee('venmo-account-id');
-  await manager.getTransferPayee('venmo-account-id');
-
-  expect(apiMock.payees.getPayees).toHaveBeenCalledTimes(1);
-})
-
-test('should only call the YNAB api once for a number of parallel requests', async ()=> {
-  await Promise.all([
-    manager.getTransferPayee('venmo-account-id'),
-    manager.getTransferPayee('venmo-account-id'),
-  ]);
-
-  expect(apiMock.payees.getPayees).toHaveBeenCalledTimes(1);
-})

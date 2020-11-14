@@ -1,32 +1,24 @@
 import ynab, { PayeesResponse } from 'ynab'
+import Cache from '../cache';
+
 
 export default class PayeeManager {
   api: ynab.API
   budgetId: string
+  private cache: Cache<PayeesResponse>
   private payeeCache: PayeesResponse | null = null;
   private payeePromise: Promise<PayeesResponse> | null = null;
 
   constructor(api: ynab.API, budgetId: string) {
     this.api = api;
+    this.cache = new Cache<PayeesResponse>(() => {
+      return this.api.payees.getPayees(this.budgetId);
+    })
     this.budgetId = budgetId;
   }
 
-  async getCached() : Promise<PayeesResponse>{
-    if (this.payeeCache) {
-      return this.payeeCache
-    }
-
-    if (this.payeePromise) {
-      return this.payeePromise;
-    }
-    
-   this.payeePromise = this.api.payees.getPayees(this.budgetId);
-
-   return this.payeePromise;
-  }
-
   async getTransferPayee(accountId: string){
-  const payees = await this.getCached();
+  const payees = await this.cache.get();
 
   const payee = payees.data.payees.filter(payee => {
     return !payee.deleted;
