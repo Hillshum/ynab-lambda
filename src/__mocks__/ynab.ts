@@ -1,4 +1,4 @@
-import { PayeesResponse, Payee, MonthDetailResponse } from "ynab";
+import { PayeesResponse, Payee, MonthDetailResponse, AccountsResponse, Account } from "ynab";
 import { BUDGET_ID } from "../utils/constants";
 const ynab = {
   utils: {
@@ -6,6 +6,68 @@ const ynab = {
   },
   transactions: {},
   API: class {
+    accounts = {
+      getAccounts: jest.fn(async (): Promise<AccountsResponse> => {
+        const accounts: Account[] = [
+          {
+            id: 'id-test-transfer',
+            name: 'Test Account',
+            on_budget: true,
+            closed: false,
+            balance: 2503543,
+            uncleared_balance: 353,
+            cleared_balance: 35,
+            transfer_payee_id: 'existing-transfer-id',
+            type: Account.TypeEnum.Checking,
+            deleted: false,
+          },
+          {
+            id: 'id-closed',
+            name: 'Test Account',
+            on_budget: true,
+            closed: true,
+            balance: 2503543,
+            uncleared_balance: 353,
+            cleared_balance: 35,
+            transfer_payee_id: 'closed-transfer-id',
+            type: Account.TypeEnum.Checking,
+            deleted: false,
+          },
+          {
+            id: 'id-deleted',
+            name: 'Test Account',
+            on_budget: true,
+            closed: false,
+            balance: 2503543,
+            uncleared_balance: 353,
+            cleared_balance: 35,
+            transfer_payee_id: 'deleted-transfer-id',
+            type: Account.TypeEnum.Checking,
+            deleted: true,
+          },
+          {
+            id: 'id-offbudget',
+            name: 'Test Account',
+            on_budget: false,
+            closed: false,
+            balance: 2503543,
+            uncleared_balance: 353,
+            cleared_balance: 35,
+            transfer_payee_id: 'gm-retirement-transfer-id',
+            type: Account.TypeEnum.Checking,
+            deleted: false,
+          }
+
+        ]
+
+        return {
+          data: {
+            accounts,
+            server_knowledge: 353453,
+          }
+        }
+      })
+    }
     categories = {
       updateMonthCategory: jest.fn(()=>Promise.resolve()),
     }

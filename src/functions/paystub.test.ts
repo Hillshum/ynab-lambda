@@ -23,10 +23,14 @@ mockedParse.mockImplementation(()=> {
 });
 
 import { api } from '../utils/api/api';
+import adjustCategories from '../adjust-categories'
 
 jest.mock('../utils/api/api.ts');
 
 
+jest.mock('../adjust-categories');
+
+const mockedAdjust = mocked(adjustCategories);
 
 const mockedApi = mocked(api, false);
 
@@ -129,4 +133,14 @@ test('it sends the correct transactions to ynab', async () => {
 
   expect(mockedApi.transactions.createTransactions).toHaveBeenCalledWith(
     BUDGET_ID, {transactions: transactionsToUpload});
+})
+
+
+test('calculates the correct transactions that need adjustments', async () => {
+
+  await paystubHandler(stub);
+
+  expect(mockedAdjust).toHaveBeenCalledTimes(1);
+  expect(mockedAdjust.mock.calls[0][0]).toHaveLength(4);
+
 })
