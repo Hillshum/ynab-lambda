@@ -67,13 +67,8 @@ const transactionRows: TransactionDetails[] = [
     direction: 'outflow',
     memo: 'Health premium',
   },
-  {
-    name: 'net',
-    payeeTransferId: RBFCU_CHECKING_ID,
-    direction: 'outflow',
-    memo: 'Net paycheck',
-  },
 ]
+
 
 interface CalculatedTransaction {
   details: TransactionDetails
@@ -106,15 +101,13 @@ export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResul
 
   try {
 
-    let transactionsToAdjust: ynab.SaveTransaction[] = [];
+    let transactionsToAdjust: ynab.SaveSubTransaction[] = [];
 
     const amounts = parsePaystub(stub);
 
-    const newTransactions: ynab.SaveTransaction[] = await Promise.all(transactionRows.map(async transaction => {
-      const preparedTransaction: ynab.SaveTransaction = {
+    const newTransactions: ynab.SaveSubTransaction[] = await Promise.all(transactionRows.map(async transaction => {
+      const preparedTransaction: ynab.SaveSubTransaction = {
         amount: Math.round(amounts[transaction.name] * 1000 * directionMultipliers[transaction.direction]),
-        account_id: WITHHOLDINGS_ID,
-        date: ynab.utils.getCurrentDateInISOFormat(),
         memo: transaction.memo,
 
       }
@@ -140,11 +133,9 @@ export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResul
 
     }))
 
-    const calculated: ynab.SaveTransaction[] = await Promise.all(calculatedTransactions.map(async (transaction) => {
-      const preparedTransaction: ynab.SaveTransaction = {
+    const calculated: ynab.SaveSubTransaction[] = await Promise.all(calculatedTransactions.map(async (transaction) => {
+      const preparedTransaction: ynab.SaveSubTransaction = {
         amount: Math.round(transaction.calculate(amounts) * 1000 * directionMultipliers[transaction.details.direction]),
-        account_id: WITHHOLDINGS_ID,
-        date: ynab.utils.getCurrentDateInISOFormat(),
         memo: transaction.details.memo,
 
       }
@@ -168,15 +159,24 @@ export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResul
       return preparedTransaction;
     }))
 
-    const transactionsToCreate = [...newTransactions, ...calculated];
+    const parentTransaction: ynab.SaveTransaction = {
+      payee_name: 'General Motors',
+      memo: 'Net paycheck',
+      amount: Math.round(amounts.net * 1000),
+      date: ynab.utils.getCurrentDateInISOFormat(),
+      account_id: RBFCU_CHECKING_ID,
+      subtransactions: [...newTransactions, ...calculated]
+    }
 
-    console.log(`about to create new transactions ${JSON.stringify(transactionsToCreate)}`)
-    await api.transactions.createTransactions(BUDGET_ID, {transactions: transactionsToCreate });
+    // const transactionsToCreate = [...newTransactions, ...calculated];
+
+    console.log(`about to create new transactions ${JSON.stringify(parentTransaction)}`)
+    await api.transactions.createTransactions(BUDGET_ID, {transaction: parentTransaction });
 
 
 
     console.log(`about to adjust categories ${transactionsToAdjust}`)
-    await adjustCategories(transactionsToAdjust);
+    // await adjustCategories(transactionsToAdjust);
 
 
 
