@@ -112,7 +112,7 @@ export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResul
 
     const newTransactions: ynab.SaveTransaction[] = await Promise.all(transactionRows.map(async transaction => {
       const preparedTransaction: ynab.SaveTransaction = {
-        amount: amounts[transaction.name] * 1000 * directionMultipliers[transaction.direction],
+        amount: Math.round(amounts[transaction.name] * 1000 * directionMultipliers[transaction.direction]),
         account_id: WITHHOLDINGS_ID,
         date: ynab.utils.getCurrentDateInISOFormat(),
         memo: transaction.memo,
@@ -170,9 +170,12 @@ export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResul
 
     const transactionsToCreate = [...newTransactions, ...calculated];
 
+    console.log(`about to create new transactions ${JSON.stringify(transactionsToCreate)}`)
     await api.transactions.createTransactions(BUDGET_ID, {transactions: transactionsToCreate });
 
 
+
+    console.log(`about to adjust categories ${transactionsToAdjust}`)
     await adjustCategories(transactionsToAdjust);
 
 
