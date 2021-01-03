@@ -11,10 +11,10 @@ const mockedParse = mocked(parsePaystub);
 mockedParse.mockImplementation(()=> {
   return {
     gross: 515,
-    taxes: 35.335,
-    hsa: 34.35,
-    health: 893,
-    retirement: 122.76,
+    taxes: -35.335,
+    hsa: -34.35,
+    health: -893,
+    retirement: -122.76,
     net: 83,
     retirement_gm: 0,
     retirement_total: 0,
@@ -118,6 +118,7 @@ test('it sends the correct transactions to ynab', async () => {
   await paystubHandler(stub);
 
   expect(mockedApi.transactions.createTransactions).toHaveBeenCalledTimes(1);
+
 
   expect(mockedApi.transactions.createTransactions).toHaveBeenCalledWith(
     BUDGET_ID, {transaction: transactionsToUpload});

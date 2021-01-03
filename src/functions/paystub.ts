@@ -26,10 +26,6 @@ interface TransactionNamedPayee extends TransactionDetailsRaw {
 }
 
 type TransactionDetails = TransactionTransfer | TransactionNamedPayee
-const directionMultipliers = {
-  inflow: 1,
-  outflow: -1,
-}
 
 const isNamedPayee = (t: TransactionDetails): t is TransactionNamedPayee => (
   (t as TransactionNamedPayee).payeeName !== undefined
@@ -83,7 +79,7 @@ const calculatedTransactions: CalculatedTransaction[] = [
       direction: 'inflow',
       memo: '401(k) contribution',
     },
-    calculate: (amounts) => amounts.retirement * 2
+    calculate: (amounts) => amounts.retirement * -2
   },
   {
     details: {
@@ -107,7 +103,7 @@ export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResul
 
     const newTransactions: ynab.SaveSubTransaction[] = await Promise.all(transactionRows.map(async transaction => {
       const preparedTransaction: ynab.SaveSubTransaction = {
-        amount: Math.round(amounts[transaction.name] * 1000 * directionMultipliers[transaction.direction]),
+        amount: Math.round(amounts[transaction.name] * 1000),
         memo: transaction.memo,
 
       }
@@ -135,7 +131,7 @@ export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResul
 
     const calculated: ynab.SaveSubTransaction[] = await Promise.all(calculatedTransactions.map(async (transaction) => {
       const preparedTransaction: ynab.SaveSubTransaction = {
-        amount: Math.round(transaction.calculate(amounts) * 1000 * directionMultipliers[transaction.details.direction]),
+        amount: Math.round(transaction.calculate(amounts) * 1000),
         memo: transaction.details.memo,
 
       }
