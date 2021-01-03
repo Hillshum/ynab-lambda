@@ -2,7 +2,7 @@ import { APIGatewayProxyResult } from "aws-lambda";
 import { parsePaystub, TransactionType } from "../parse-paystub";
 import * as ynab from "ynab";
 
-import { api, payeeManager, accountManager } from '../utils/api';
+import { api, payeeManager, categoryManager, accountManager } from '../utils/api';
 
 
 import { WITHHOLDINGS_ID, BUDGET_ID, RBFCU_CHECKING_ID, GM_RETIREMENT_ACCOUNT_ID } from "../utils/constants";
@@ -40,7 +40,7 @@ const transactionRows: TransactionDetails[] = [
   {
     name: 'gross',
     payeeName: 'General Motors',
-    // categoryName: 'Inflow: To'
+    categoryName: 'Inflows',
     direction: 'inflow',
     memo: 'Gross Pay',
   },
@@ -49,17 +49,20 @@ const transactionRows: TransactionDetails[] = [
     name: 'taxes',
     payeeName: 'Internal Revenue Service',
     direction: 'outflow',
+    categoryName: 'Taxes',
     memo: 'All deducted taxes',
   },
   {
     name: 'hsa',
     payeeName: 'HSA',
     direction: 'outflow',
+    categoryName: 'HSA Contributions',
     memo: 'Regular deduction',
   },
   {
     name: 'health',
     payeeName: 'Aetna',
+    categoryName: 'Health Coverage',
     direction: 'outflow',
     memo: 'Health premium',
   },
@@ -77,6 +80,7 @@ const calculatedTransactions: CalculatedTransaction[] = [
       name: 'retirement_gm',
       payeeName: 'General Motors',
       direction: 'inflow',
+      categoryName: '401(k) contributions',
       memo: '401(k) contribution',
     },
     calculate: (amounts) => amounts.retirement * -2
@@ -86,6 +90,7 @@ const calculatedTransactions: CalculatedTransaction[] = [
       name: 'retirement_total',
       payeeTransferId: GM_RETIREMENT_ACCOUNT_ID,
       direction: 'outflow',
+      categoryName: '401(k) contributions',
       memo: 'Retirement savings',
     },
     calculate: (amounts) => amounts.retirement * 3
@@ -105,8 +110,12 @@ export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResul
       const preparedTransaction: ynab.SaveSubTransaction = {
         amount: Math.round(amounts[transaction.name] * 1000),
         memo: transaction.memo,
-
       }
+
+      if (transaction.categoryName) {
+        preparedTransaction.category_id = await categoryManager.getCategoryIdByName(transaction.categoryName)
+      }
+
       if (isTransfer(transaction)) {
         preparedTransaction.payee_id = await payeeManager.getTransferPayee(transaction.payeeTransferId)
 
@@ -135,6 +144,11 @@ export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResul
         memo: transaction.details.memo,
 
       }
+
+      if (transaction.details.categoryName) {
+        preparedTransaction.category_id = await categoryManager.getCategoryIdByName(transaction.details.categoryName)
+      }
+
       if (isTransfer(transaction.details)) {
         preparedTransaction.payee_id = await payeeManager.getTransferPayee(transaction.details.payeeTransferId)
 
@@ -161,7 +175,7 @@ export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResul
       amount: Math.round(amounts.net * 1000),
       date: ynab.utils.getCurrentDateInISOFormat(),
       account_id: RBFCU_CHECKING_ID,
-      subtransactions: [...newTransactions, ...calculated]
+      subtransactions: [...newTransactions, ...calculated],
     }
 
     // const transactionsToCreate = [...newTransactions, ...calculated];
