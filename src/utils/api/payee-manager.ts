@@ -17,7 +17,7 @@ export default class PayeeManager {
     this.budgetId = budgetId;
   }
 
-  async getTransferPayee(accountId: string){
+  async getTransferPayee(accountId: string): Promise<string>{
   const payees = await this.cache.get();
 
   const payee = payees.data.payees.filter(payee => {

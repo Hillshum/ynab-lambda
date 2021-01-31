@@ -5,7 +5,7 @@ import { mocked } from 'ts-jest/utils';
 
 const api: API = new API(constants.ACCESS_TOKEN)
 
-const apiMock = mocked(api);
+mocked(api);
 let manager: PayeeManager;
 
 beforeEach(() => {

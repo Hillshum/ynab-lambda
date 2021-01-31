@@ -1,4 +1,4 @@
-import { API, SaveMonthCategory, SaveMonthCategoryWrapper, SaveTransaction } from 'ynab';
+import { API, SaveTransaction } from 'ynab';
 import adjustCategories from './adjust-categories';
 
 

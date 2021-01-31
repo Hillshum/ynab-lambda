@@ -37,8 +37,6 @@ const mockedApi = mocked(api, false);
 
 import paystubHandler from './paystub';
 import { SaveTransaction } from "ynab";
-import { categoryManager } from "../utils/api";
-
 
 const stub = `
  Gross Pay$2,351.80

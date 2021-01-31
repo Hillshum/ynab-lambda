@@ -16,7 +16,7 @@ export default class CategoryManager {
   }
   
 
-  async getCategoryIdByName(categoryName: string) {
+  async getCategoryIdByName(categoryName: string): Promise<string> {
     const response = await this.cache.get();
 
     const categories = response.data.category_groups.flatMap(group => group.categories)

@@ -4,7 +4,8 @@ import { BUDGET_ID } from "./utils/constants";
 
 import { api } from "./utils/api";
 
-const adjustCategories = async (transactions: ynab.SaveTransaction[]) => {
+const adjustCategories = async (transactions: ynab.SaveTransaction[]):
+    Promise<undefined> => {
   const month = 'current' // TODO: fix that for timezone and rollover
   const {data: {month: {categories: currentCategories }}} = await api.months.getBudgetMonth(BUDGET_ID, month) 
 
@@ -35,6 +36,8 @@ const adjustCategories = async (transactions: ynab.SaveTransaction[]) => {
       }})
 
   }))
+
+  return;
 
 }
 

@@ -1,7 +1,5 @@
 import AccountManager from './account-manager'
 
-import Cache from '../cache'
-import { mocked } from 'ts-jest/utils';
 
 
 // jest.mock('../cache', ()=> {
@@ -16,7 +14,7 @@ import { mocked } from 'ts-jest/utils';
 
 describe('AccountManager', ()=> {
   it('intansiates without error', ()=> {
-    const manager = new AccountManager();
+    new AccountManager();
   })
 
   xit('properly uses the data cache', async ()=> {

@@ -8,6 +8,7 @@ export interface Transaction {
   ImportId: string,
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getPayee = (payment: any) => {
   if (payment.Type === 'Payment') {
     return payment['Amount (total)'].includes('-') ? payment.To : payment.From;
@@ -43,4 +44,4 @@ export const parse = (input: string): Transaction[] => {
 
 }
 
-export const unparse = (transactions:Transaction[]) => Papa.unparse(transactions)
+export const unparse = (transactions:Transaction[]): string => Papa.unparse(transactions)

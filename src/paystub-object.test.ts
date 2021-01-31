@@ -31,6 +31,6 @@ test('should correctly extract net pay', () => {
 
 xtest('should correctly throw if no match', () => {
   const faultyStub: unknown = 'afweawf';
-  const faultyWrapper = new PayStubWrapper(faultyStub as PayStub);
+  new PayStubWrapper(faultyStub as PayStub);
   expect(() => wrapper.getGrossPay()).toThrow(new RegExp(`Unable to parse .* from ${faultyStub}`));
 })

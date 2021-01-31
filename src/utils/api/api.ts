@@ -1,4 +1,5 @@
 import * as ynab from 'ynab';
+import { SaveTransactionsResponse, TransactionDetail } from 'ynab';
 
 import { ACCESS_TOKEN, BUDGET_ID } from '../constants'
 import { Transaction } from '../csv';
@@ -6,13 +7,15 @@ import { Transaction } from '../csv';
 
 export const api = new ynab.API(ACCESS_TOKEN)
 
-export const loadTransactions = async (accountId: string) => {
+export const loadTransactions = async (accountId: string):
+    Promise<TransactionDetail[]> => {
   const response = await api.transactions.getTransactionsByAccount(BUDGET_ID, accountId);
   return response.data.transactions;
 
 }
 
-export const postTransactions = (transactions: Transaction[], accountId: string) => {
+export const postTransactions = (transactions: Transaction[], accountId: string):
+    Promise<SaveTransactionsResponse> => {
   const formateted: ynab.SaveTransaction[] = transactions.map(t=> ({
     date: t.Date,
     amount: t.Amount * 1000,

@@ -1,5 +1,4 @@
 import { CategoriesResponse, PayeesResponse, Payee, MonthDetailResponse, AccountsResponse, Account } from "ynab";
-import { BUDGET_ID } from "../utils/constants";
 const ynab = {
   utils: {
     getCurrentDateInISOFormat: () => '2020-03-21'
@@ -72,6 +71,7 @@ const ynab = {
       updateMonthCategory: jest.fn(()=>Promise.resolve()),
       getCategories: jest.fn(
           (budget_id: string): Promise<CategoriesResponse> => {
+              budget_id; // to shut the linter up
               const response: CategoriesResponse = {
                   data: {
                         "category_groups": [
@@ -162,7 +162,13 @@ const ynab = {
     }
     months = {
       getBudgetMonth: jest.fn( 
-        (BudgetId: string, month: string | Date): Promise<MonthDetailResponse> => {
+        (budget_id: string, month: string | Date): Promise<MonthDetailResponse> => {
+
+          // to shut the linter up
+          budget_id;
+          month; 
+
+
           const response: MonthDetailResponse = {
             data: {
               month: {

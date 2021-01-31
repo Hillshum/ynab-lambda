@@ -66,14 +66,14 @@ class PayStubWrapper {
 
   }
 
-  getGrossPay() {
+  getGrossPay(): number {
     const latest = this.getLatest();
     const bucket = this.getBucketByLabel('Earnings', latest);
 
     return bucket.amount;
   }
 
-  getNetPay() {
+  getNetPay(): number {
     const latest = this.getLatest();
 
     const netBucket = this.getBucketByLabel("Net Pay", latest);
@@ -82,11 +82,11 @@ class PayStubWrapper {
 
   }
 
-  getPreTax() {
+  getPreTax(): Bucket {
     return this.getBucketByLabel('EE Benefits Pre-tax Deductions', this.getLatest());
   }
 
-  getHSA() {
+  getHSA(): number{
     const preTax = this.getPreTax();
 
     const label = '*HEALTH SAVINGS ACCT';
@@ -97,7 +97,7 @@ class PayStubWrapper {
 
   }
 
-  getHealth() {
+  getHealth(): number{
     const preTax = this.getPreTax();
 
     const label = '*HEALTH CARE';
@@ -108,7 +108,7 @@ class PayStubWrapper {
 
   }
 
-  getRetirement() {
+  getRetirement(): number {
 
     const preTax = this.getPreTax();
 
@@ -120,7 +120,7 @@ class PayStubWrapper {
 
   }
 
-  getTaxes() {
+  getTaxes(): number {
     const latest = this.getLatest();
 
     const bucket = this.getBucketByLabel("EE Taxes", latest);

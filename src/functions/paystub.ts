@@ -5,8 +5,7 @@ import * as ynab from "ynab";
 import { api, payeeManager, categoryManager, accountManager } from '../utils/api';
 
 
-import { WITHHOLDINGS_ID, BUDGET_ID, RBFCU_CHECKING_ID, GM_RETIREMENT_ACCOUNT_ID } from "../utils/constants";
-import adjustCategories from "../adjust-categories";
+import { BUDGET_ID, RBFCU_CHECKING_ID, GM_RETIREMENT_ACCOUNT_ID } from "../utils/constants";
 
 type Direction = 'inflow' | 'outflow';
 
@@ -102,7 +101,7 @@ export const paystubHandler = async (stub: string): Promise<APIGatewayProxyResul
 
   try {
 
-    let transactionsToAdjust: ynab.SaveSubTransaction[] = [];
+    const transactionsToAdjust: ynab.SaveSubTransaction[] = [];
 
     const amounts = parsePaystub(stub);
 
