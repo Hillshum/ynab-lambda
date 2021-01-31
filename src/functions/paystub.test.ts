@@ -37,6 +37,7 @@ const mockedApi = mocked(api, false);
 
 import paystubHandler from './paystub';
 import { SaveTransaction } from "ynab";
+import { categoryManager } from "../utils/api";
 
 
 const stub = `
@@ -69,32 +70,38 @@ const stub = `
       amount: 515000,
       memo: 'Gross Pay',
       payee_name: 'General Motors',
+      category_id: 'INFLOW-CATEGORY',
 
     },
     {
       amount: -35335,
       memo: 'All deducted taxes',
+      category_id: 'taxes',
       payee_name: 'Internal Revenue Service',
     },
     {
       amount: -34350,
       memo: 'Regular deduction',
+      category_id: 'hsa',
       payee_name: 'HSA',
     },
     {
       amount: -893000,
       memo: 'Health premium',
-      payee_name: 'Aetna'
+      payee_name: 'Aetna',
+      category_id: 'health',
     },
     {
       amount: 245520,
       payee_name: 'General Motors',
-      memo: '401(k) contribution'
+      memo: '401(k) contribution',
+      category_id: '401k',
     },
     {
       amount: -368280,
       payee_id: 'gm-retirement-transfer-id',
-      memo: 'Retirement savings'
+      memo: 'Retirement savings',
+      category_id: '401k',
     }
   ]
 }

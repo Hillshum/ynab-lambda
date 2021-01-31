@@ -1,4 +1,4 @@
-import { PayeesResponse, Payee, MonthDetailResponse, AccountsResponse, Account } from "ynab";
+import { CategoriesResponse, PayeesResponse, Payee, MonthDetailResponse, AccountsResponse, Account } from "ynab";
 import { BUDGET_ID } from "../utils/constants";
 const ynab = {
   utils: {
@@ -70,6 +70,95 @@ const ynab = {
     }
     categories = {
       updateMonthCategory: jest.fn(()=>Promise.resolve()),
+      getCategories: jest.fn(
+          (budget_id: string): Promise<CategoriesResponse> => {
+              const response: CategoriesResponse = {
+                  data: {
+                        "category_groups": [
+                            {
+                                id: 'INTERNAL-MASTER',
+                                name: 'Internal Master Category',
+                                hidden: false,
+                                deleted: false,
+                                categories: [
+                                    {
+                                        id: 'INFLOW-CATEGORY',
+                                        category_group_id: 'INTERNAL-MASTER',
+                                        name: 'Inflows',
+                                        budgeted: 0,
+                                        activity: 335,
+                                        balance: 353,
+                                        hidden: false,
+                                        deleted: false,
+                                    }
+                                ]
+                            },
+                            {
+                                id: 'OTHER-CATEGORY-GROUP',
+                                name: 'Other categories',
+                                hidden: false,
+                                deleted: false,
+                                categories: [
+                                    {
+                                        id: 'hsa',
+                                        name: 'HSA Contributions',
+                                        category_group_id: 'OTHER-CATEGORY-GROUP',
+                                        budgeted: 0,
+                                        activity: 335,
+                                        balance: 353,
+                                        hidden: false,
+                                        deleted: false,
+                                    },
+                                    {
+                                        id: 'health',
+                                        name: 'Health Coverage',
+                                        category_group_id: 'OTHER-CATEGORY-GROUP',
+                                        budgeted: 0,
+                                        activity: 335,
+                                        balance: 353,
+                                        hidden: false,
+                                        deleted: false,
+                                    },
+                                    {
+                                        id: 'taxes',
+                                        name: 'Taxes',
+                                        category_group_id: 'OTHER-CATEGORY-GROUP',
+                                        budgeted: 0,
+                                        activity: 335,
+                                        balance: 353,
+                                        hidden: false,
+                                        deleted: false,
+                                    },
+                                    {
+                                        id: '401k',
+                                        name: '401(k) contributions',
+                                        category_group_id: 'OTHER-CATEGORY-GROUP',
+                                        budgeted: 0,
+                                        activity: 335,
+                                        balance: 353,
+                                        hidden: false,
+                                        deleted: false,
+                                    },
+                                    {
+                                        id: '401k',
+                                        name: '401(k) contributions',
+                                        category_group_id: 'OTHER-CATEGORY-GROUP',
+                                        budgeted: 0,
+                                        activity: 335,
+                                        balance: 353,
+                                        hidden: false,
+                                        deleted: false,
+                                    }
+
+                                ]
+                            }
+                        ],
+                        server_knowledge: 0
+                  },
+              }
+              return Promise.resolve(response);
+          }
+    ),
     }
     months = {
       getBudgetMonth: jest.fn( 
