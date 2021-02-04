@@ -1,4 +1,3 @@
-
 interface WageType {
   id: string;
   label: string;
@@ -21,12 +20,10 @@ interface Payment {
   buckets: Bucket[];
 }
 
-
 interface BucketDescription {
   id: string;
   label: string;
 }
-
 
 export interface PayStub {
   buckets: BucketDescription[];
@@ -41,29 +38,27 @@ class PayStubWrapper {
   }
 
   private getLatest() {
-    return this.stub.payments[this.stub.payments.length -1];
+    return this.stub.payments[this.stub.payments.length - 1];
   }
 
   private getBucketByLabel(label: string, payment: Payment) {
-
-    const id = this.stub.buckets.find(b => b.label === label)?.id;
-    const bucket = payment.buckets.find(b => b.id === id);
+    const id = this.stub.buckets.find((b) => b.label === label)?.id;
+    const bucket = payment.buckets.find((b) => b.id === id);
 
     if (!bucket) {
-      throw new Error("Unable to get bucket");
+      throw new Error('Unable to get bucket');
     }
 
     return bucket;
   }
 
   private getWageTypeByLabel(label: string, bucket: Bucket) {
-    const wage = bucket.wagetypes.find(w => w.label === label);
-    if (! wage) {
-      throw new Error (`Unable to get wagetype: ${label}`)
+    const wage = bucket.wagetypes.find((w) => w.label === label);
+    if (!wage) {
+      throw new Error(`Unable to get wagetype: ${label}`);
     }
 
     return wage;
-
   }
 
   getGrossPay(): number {
@@ -76,58 +71,55 @@ class PayStubWrapper {
   getNetPay(): number {
     const latest = this.getLatest();
 
-    const netBucket = this.getBucketByLabel("Net Pay", latest);
+    const netBucket = this.getBucketByLabel('Net Pay', latest);
 
     return netBucket.amount;
-
   }
 
   getPreTax(): Bucket {
-    return this.getBucketByLabel('EE Benefits Pre-tax Deductions', this.getLatest());
+    return this.getBucketByLabel(
+      'EE Benefits Pre-tax Deductions',
+      this.getLatest(),
+    );
   }
 
-  getHSA(): number{
+  getHSA(): number {
     const preTax = this.getPreTax();
 
     const label = '*HEALTH SAVINGS ACCT';
-    
+
     const wage = this.getWageTypeByLabel(label, preTax);
 
     return wage.amount;
-
   }
 
-  getHealth(): number{
+  getHealth(): number {
     const preTax = this.getPreTax();
 
     const label = '*HEALTH CARE';
-    
+
     const wage = this.getWageTypeByLabel(label, preTax);
 
     return wage.amount;
-
   }
 
   getRetirement(): number {
-
     const preTax = this.getPreTax();
 
     const label = '*RSP PRE-TAX BASIC';
-    
+
     const wage = this.getWageTypeByLabel(label, preTax);
 
     return wage.amount;
-
   }
 
   getTaxes(): number {
     const latest = this.getLatest();
 
-    const bucket = this.getBucketByLabel("EE Taxes", latest);
+    const bucket = this.getBucketByLabel('EE Taxes', latest);
 
     return bucket.amount;
-
   }
 }
 
-export { PayStubWrapper } 
+export { PayStubWrapper };

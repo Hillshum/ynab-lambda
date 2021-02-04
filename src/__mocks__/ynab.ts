@@ -1,173 +1,181 @@
-import { CategoriesResponse, PayeesResponse, Payee, MonthDetailResponse, AccountsResponse, Account } from "ynab";
+import {
+  CategoriesResponse,
+  PayeesResponse,
+  Payee,
+  MonthDetailResponse,
+  AccountsResponse,
+  Account,
+} from 'ynab';
 const ynab = {
   utils: {
-    getCurrentDateInISOFormat: () => '2020-03-21'
+    getCurrentDateInISOFormat: () => '2020-03-21',
   },
   transactions: {},
   API: class {
     accounts = {
-      getAccounts: jest.fn(async (): Promise<AccountsResponse> => {
-        const accounts: Account[] = [
-          {
-            id: 'id-test-transfer',
-            name: 'Test Account',
-            on_budget: true,
-            closed: false,
-            balance: 2503543,
-            uncleared_balance: 353,
-            cleared_balance: 35,
-            transfer_payee_id: 'existing-transfer-id',
-            type: Account.TypeEnum.Checking,
-            deleted: false,
-          },
-          {
-            id: 'id-closed',
-            name: 'Test Account',
-            on_budget: true,
-            closed: true,
-            balance: 2503543,
-            uncleared_balance: 353,
-            cleared_balance: 35,
-            transfer_payee_id: 'closed-transfer-id',
-            type: Account.TypeEnum.Checking,
-            deleted: false,
-          },
-          {
-            id: 'id-deleted',
-            name: 'Test Account',
-            on_budget: true,
-            closed: false,
-            balance: 2503543,
-            uncleared_balance: 353,
-            cleared_balance: 35,
-            transfer_payee_id: 'deleted-transfer-id',
-            type: Account.TypeEnum.Checking,
-            deleted: true,
-          },
-          {
-            id: 'id-offbudget',
-            name: 'Test Account',
-            on_budget: false,
-            closed: false,
-            balance: 2503543,
-            uncleared_balance: 353,
-            cleared_balance: 35,
-            transfer_payee_id: 'gm-retirement-transfer-id',
-            type: Account.TypeEnum.Checking,
-            deleted: false,
-          }
+      getAccounts: jest.fn(
+        async (): Promise<AccountsResponse> => {
+          const accounts: Account[] = [
+            {
+              id: 'id-test-transfer',
+              name: 'Test Account',
+              on_budget: true,
+              closed: false,
+              balance: 2503543,
+              uncleared_balance: 353,
+              cleared_balance: 35,
+              transfer_payee_id: 'existing-transfer-id',
+              type: Account.TypeEnum.Checking,
+              deleted: false,
+            },
+            {
+              id: 'id-closed',
+              name: 'Test Account',
+              on_budget: true,
+              closed: true,
+              balance: 2503543,
+              uncleared_balance: 353,
+              cleared_balance: 35,
+              transfer_payee_id: 'closed-transfer-id',
+              type: Account.TypeEnum.Checking,
+              deleted: false,
+            },
+            {
+              id: 'id-deleted',
+              name: 'Test Account',
+              on_budget: true,
+              closed: false,
+              balance: 2503543,
+              uncleared_balance: 353,
+              cleared_balance: 35,
+              transfer_payee_id: 'deleted-transfer-id',
+              type: Account.TypeEnum.Checking,
+              deleted: true,
+            },
+            {
+              id: 'id-offbudget',
+              name: 'Test Account',
+              on_budget: false,
+              closed: false,
+              balance: 2503543,
+              uncleared_balance: 353,
+              cleared_balance: 35,
+              transfer_payee_id: 'gm-retirement-transfer-id',
+              type: Account.TypeEnum.Checking,
+              deleted: false,
+            },
+          ];
 
-        ]
-
-        return {
-          data: {
-            accounts,
-            server_knowledge: 353453,
-          }
-        }
-      })
-    }
+          return {
+            data: {
+              accounts,
+              server_knowledge: 353453,
+            },
+          };
+        },
+      ),
+    };
     categories = {
-      updateMonthCategory: jest.fn(()=>Promise.resolve()),
+      updateMonthCategory: jest.fn(() => Promise.resolve()),
       getCategories: jest.fn(
-          (budget_id: string): Promise<CategoriesResponse> => {
-              budget_id; // to shut the linter up
-              const response: CategoriesResponse = {
-                  data: {
-                        "category_groups": [
-                            {
-                                id: 'INTERNAL-MASTER',
-                                name: 'Internal Master Category',
-                                hidden: false,
-                                deleted: false,
-                                categories: [
-                                    {
-                                        id: 'INFLOW-CATEGORY',
-                                        category_group_id: 'INTERNAL-MASTER',
-                                        name: 'Inflows',
-                                        budgeted: 0,
-                                        activity: 335,
-                                        balance: 353,
-                                        hidden: false,
-                                        deleted: false,
-                                    }
-                                ]
-                            },
-                            {
-                                id: 'OTHER-CATEGORY-GROUP',
-                                name: 'Other categories',
-                                hidden: false,
-                                deleted: false,
-                                categories: [
-                                    {
-                                        id: 'hsa',
-                                        name: 'HSA Contributions',
-                                        category_group_id: 'OTHER-CATEGORY-GROUP',
-                                        budgeted: 0,
-                                        activity: 335,
-                                        balance: 353,
-                                        hidden: false,
-                                        deleted: false,
-                                    },
-                                    {
-                                        id: 'health',
-                                        name: 'Health Coverage',
-                                        category_group_id: 'OTHER-CATEGORY-GROUP',
-                                        budgeted: 0,
-                                        activity: 335,
-                                        balance: 353,
-                                        hidden: false,
-                                        deleted: false,
-                                    },
-                                    {
-                                        id: 'taxes',
-                                        name: 'Taxes',
-                                        category_group_id: 'OTHER-CATEGORY-GROUP',
-                                        budgeted: 0,
-                                        activity: 335,
-                                        balance: 353,
-                                        hidden: false,
-                                        deleted: false,
-                                    },
-                                    {
-                                        id: '401k',
-                                        name: '401(k) contributions',
-                                        category_group_id: 'OTHER-CATEGORY-GROUP',
-                                        budgeted: 0,
-                                        activity: 335,
-                                        balance: 353,
-                                        hidden: false,
-                                        deleted: false,
-                                    },
-                                    {
-                                        id: '401k',
-                                        name: '401(k) contributions',
-                                        category_group_id: 'OTHER-CATEGORY-GROUP',
-                                        budgeted: 0,
-                                        activity: 335,
-                                        balance: 353,
-                                        hidden: false,
-                                        deleted: false,
-                                    }
-
-                                ]
-                            }
-                        ],
-                        server_knowledge: 0
-                  },
-              }
-              return Promise.resolve(response);
-          }
-    ),
-    }
+        (budget_id: string): Promise<CategoriesResponse> => {
+          budget_id; // to shut the linter up
+          const response: CategoriesResponse = {
+            data: {
+              category_groups: [
+                {
+                  id: 'INTERNAL-MASTER',
+                  name: 'Internal Master Category',
+                  hidden: false,
+                  deleted: false,
+                  categories: [
+                    {
+                      id: 'INFLOW-CATEGORY',
+                      category_group_id: 'INTERNAL-MASTER',
+                      name: 'Inflows',
+                      budgeted: 0,
+                      activity: 335,
+                      balance: 353,
+                      hidden: false,
+                      deleted: false,
+                    },
+                  ],
+                },
+                {
+                  id: 'OTHER-CATEGORY-GROUP',
+                  name: 'Other categories',
+                  hidden: false,
+                  deleted: false,
+                  categories: [
+                    {
+                      id: 'hsa',
+                      name: 'HSA Contributions',
+                      category_group_id: 'OTHER-CATEGORY-GROUP',
+                      budgeted: 0,
+                      activity: 335,
+                      balance: 353,
+                      hidden: false,
+                      deleted: false,
+                    },
+                    {
+                      id: 'health',
+                      name: 'Health Coverage',
+                      category_group_id: 'OTHER-CATEGORY-GROUP',
+                      budgeted: 0,
+                      activity: 335,
+                      balance: 353,
+                      hidden: false,
+                      deleted: false,
+                    },
+                    {
+                      id: 'taxes',
+                      name: 'Taxes',
+                      category_group_id: 'OTHER-CATEGORY-GROUP',
+                      budgeted: 0,
+                      activity: 335,
+                      balance: 353,
+                      hidden: false,
+                      deleted: false,
+                    },
+                    {
+                      id: '401k',
+                      name: '401(k) contributions',
+                      category_group_id: 'OTHER-CATEGORY-GROUP',
+                      budgeted: 0,
+                      activity: 335,
+                      balance: 353,
+                      hidden: false,
+                      deleted: false,
+                    },
+                    {
+                      id: '401k',
+                      name: '401(k) contributions',
+                      category_group_id: 'OTHER-CATEGORY-GROUP',
+                      budgeted: 0,
+                      activity: 335,
+                      balance: 353,
+                      hidden: false,
+                      deleted: false,
+                    },
+                  ],
+                },
+              ],
+              server_knowledge: 0,
+            },
+          };
+          return Promise.resolve(response);
+        },
+      ),
+    };
     months = {
-      getBudgetMonth: jest.fn( 
-        (budget_id: string, month: string | Date): Promise<MonthDetailResponse> => {
-
+      getBudgetMonth: jest.fn(
+        (
+          budget_id: string,
+          month: string | Date,
+        ): Promise<MonthDetailResponse> => {
           // to shut the linter up
           budget_id;
-          month; 
-
+          month;
 
           const response: MonthDetailResponse = {
             data: {
@@ -220,55 +228,58 @@ const ynab = {
                     balance: 1000,
                     deleted: false,
                   },
-                ]
-              }
-            }
-          }
+                ],
+              },
+            },
+          };
 
           return Promise.resolve(response);
-      })
-    }
+        },
+      ),
+    };
     transactions = {
       createTransactions: jest.fn(),
-    }
+    };
     payees = {
-      getPayees: jest.fn((): Promise<PayeesResponse>=> {
-            const payees: Payee[] =[
+      getPayees: jest.fn(
+        (): Promise<PayeesResponse> => {
+          const payees: Payee[] = [
             {
-              "id": "venmo-transfer-id",
-              "name": "Transfer : Venmo",
-              "transfer_account_id": "venmo-account-id",
-              "deleted": false
+              id: 'venmo-transfer-id',
+              name: 'Transfer : Venmo',
+              transfer_account_id: 'venmo-account-id',
+              deleted: false,
             },
             {
               id: 'rbfcu-checking-transfer-id',
               name: 'Transfer: RBFCU Checking',
               transfer_account_id: 'fake-rbfcu-checking-account',
-              deleted: false
+              deleted: false,
             },
             {
               id: 'gm-retirement-transfer-id',
               name: 'Transfer: RBFCU Checking',
               transfer_account_id: 'fake-gm-retirement-account',
-              deleted: false
+              deleted: false,
             },
             {
-              "id": "nyc-food-week-id",
-              "name": "NYC Food week",
-              "transfer_account_id": null,
-              "deleted": false
+              id: 'nyc-food-week-id',
+              name: 'NYC Food week',
+              transfer_account_id: null,
+              deleted: false,
             },
-          ]
+          ];
 
-        return Promise.resolve({
-          data: {
-            payees,
-            server_knowledge: 54,
-          }
-        });
-      })
-    }
-  }
-}
+          return Promise.resolve({
+            data: {
+              payees,
+              server_knowledge: 54,
+            },
+          });
+        },
+      ),
+    };
+  },
+};
 
-module.exports = ynab
+module.exports = ynab;

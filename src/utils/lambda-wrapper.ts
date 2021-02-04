@@ -1,12 +1,19 @@
-import { APIGatewayProxyResult, APIGatewayProxyEvent, Handler } from "aws-lambda";
+import {
+  APIGatewayProxyResult,
+  APIGatewayProxyEvent,
+  Handler,
+} from 'aws-lambda';
 
-export default (func: (body: string)=>Promise<APIGatewayProxyResult>):
-    Handler<APIGatewayProxyEvent, APIGatewayProxyResult> =>{
-  const handler: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
+export default (
+  func: (body: string) => Promise<APIGatewayProxyResult>,
+): Handler<APIGatewayProxyEvent, APIGatewayProxyResult> => {
+  const handler: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (
+    event,
+  ) => {
     if (event.body === null) {
       throw new Error('missing POST body');
     }
     return func(event.body);
-  }
+  };
   return handler;
-}
+};

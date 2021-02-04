@@ -1,7 +1,7 @@
-const path = require("path");
+const path = require('path');
 
 module.exports = {
-  mode: "development",
+  mode: 'development',
   devtool: false,
   target: 'node',
   entry: './src/index.ts',
@@ -15,11 +15,11 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.ts', '.js' ],
+    extensions: ['.ts', '.js'],
   },
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
-      libraryTarget: 'commonjs',
+    libraryTarget: 'commonjs',
   },
 };

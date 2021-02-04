@@ -1,5 +1,4 @@
-import { PayStubWrapper } from "./paystub-object";
-
+import { PayStubWrapper } from './paystub-object';
 
 // const regex = {
 //   gross: /^ Gross Pay\$(.+)$/m,
@@ -11,9 +10,17 @@ import { PayStubWrapper } from "./paystub-object";
 
 // }
 
-export type TransactionType = 'gross' | 'taxes' | 'hsa' | 'health' | 'retirement' | 'net' | 'retirement_gm' | 'retirement_total'
+export type TransactionType =
+  | 'gross'
+  | 'taxes'
+  | 'hsa'
+  | 'health'
+  | 'retirement'
+  | 'net'
+  | 'retirement_gm'
+  | 'retirement_total';
 
-type ParsedStub = Record<TransactionType, number>
+type ParsedStub = Record<TransactionType, number>;
 
 // const checkRegex = (regex: RegExp, corpus: string) => {
 //   const match = corpus.match(regex);
@@ -34,7 +41,7 @@ export const parsePaystub = (stub: string): ParsedStub => {
   // }, {}) as ParsedStub;
 
   const wrapper = new PayStubWrapper(JSON.parse(stub));
-  
+
   return {
     gross: wrapper.getGrossPay(),
     taxes: wrapper.getTaxes(),
@@ -42,5 +49,5 @@ export const parsePaystub = (stub: string): ParsedStub => {
     health: wrapper.getHealth(),
     net: wrapper.getNetPay(),
     retirement: wrapper.getRetirement(),
-  } as ParsedStub
-}
+  } as ParsedStub;
+};

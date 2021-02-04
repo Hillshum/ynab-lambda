@@ -1,10 +1,9 @@
 import { API, SaveTransaction } from 'ynab';
 import adjustCategories from './adjust-categories';
 
-
 import { mocked } from 'ts-jest/utils';
 
-import { api } from "./utils/api";
+import { api } from './utils/api';
 import { BUDGET_ID } from './utils/constants';
 
 const apiMock = mocked(api, true);
@@ -49,37 +48,36 @@ const transactions: TestSaveTransaction[] = [
     memo: 'Retirement savings',
     category_id: '1',
     expectedAmount: 50031,
-  }
-]
+  },
+];
 
-
-test('should fetch categories exactly once', async ()=> {
-
+test('should fetch categories exactly once', async () => {
   await adjustCategories(transactions);
 
   expect(apiMock.months.getBudgetMonth).toBeCalledTimes(1);
-
-})
+});
 
 test('should update categories with correct amounts', async () => {
-
   await adjustCategories(transactions);
 
-  const expectedCalls: Parameters<API['categories']['updateMonthCategory']>[] = transactions.map(t => {
+  const expectedCalls: Parameters<
+    API['categories']['updateMonthCategory']
+  >[] = transactions.map((t) => {
     return [
-      BUDGET_ID, 
+      BUDGET_ID,
       'current',
       t.category_id || '',
       {
         category: {
           budgeted: t.expectedAmount,
-        }
-      }
-
-    ]
-
-  })
-  expect(apiMock.categories.updateMonthCategory).toBeCalledTimes(transactions.length);
-  expect(apiMock.categories.updateMonthCategory.mock.calls).toEqual(expectedCalls);
-
-})
+        },
+      },
+    ];
+  });
+  expect(apiMock.categories.updateMonthCategory).toBeCalledTimes(
+    transactions.length,
+  );
+  expect(apiMock.categories.updateMonthCategory.mock.calls).toEqual(
+    expectedCalls,
+  );
+});

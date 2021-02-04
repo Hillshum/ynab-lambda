@@ -1,9 +1,8 @@
-
 class Cache<T> {
   private store?: T;
-  private promise?: Promise<T>
-  getter: () => Promise<T>
-  
+  private promise?: Promise<T>;
+  getter: () => Promise<T>;
+
   // TODO: Fix this to use better types
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(getter: (...args: any) => Promise<T>) {
@@ -21,11 +20,10 @@ class Cache<T> {
 
     this.promise = this.getter();
 
-    this.promise.then(data => this.store = data);
+    this.promise.then((data) => (this.store = data));
 
-    return this.promise
-
+    return this.promise;
   }
 }
 
-export default Cache
+export default Cache;

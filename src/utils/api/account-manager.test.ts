@@ -1,6 +1,4 @@
-import AccountManager from './account-manager'
-
-
+import AccountManager from './account-manager';
 
 // jest.mock('../cache', ()=> {
 //   return jest.fn().mockImplementation(() => {
@@ -11,43 +9,45 @@ import AccountManager from './account-manager'
 
 // const MockedCache = mocked(Cache, true);
 
-
-describe('AccountManager', ()=> {
-  it('intansiates without error', ()=> {
+describe('AccountManager', () => {
+  it('intansiates without error', () => {
     new AccountManager();
-  })
+  });
 
-  xit('properly uses the data cache', async ()=> {
-      const manager = new AccountManager();
-      await manager.getAccountByTransferPayee('existing-transfer-id');
-      await manager.getAccountByTransferPayee('existing-transfer-id');
-      await manager.getAccountByTransferPayee('existing-transfer-id');
-      // expect(MockedCache.mock.instances[0].get).toBeCalledTimes(3);
-  })
+  xit('properly uses the data cache', async () => {
+    const manager = new AccountManager();
+    await manager.getAccountByTransferPayee('existing-transfer-id');
+    await manager.getAccountByTransferPayee('existing-transfer-id');
+    await manager.getAccountByTransferPayee('existing-transfer-id');
+    // expect(MockedCache.mock.instances[0].get).toBeCalledTimes(3);
+  });
 
-  describe('getAcountByTransferPayee', ()=> {
+  describe('getAcountByTransferPayee', () => {
     let manager: AccountManager;
     beforeEach(() => {
       manager = new AccountManager();
-    })
+    });
 
-    it('successfully retrieves an existing account', async ()=> {
-      const account = await manager.getAccountByTransferPayee('existing-transfer-id');
-
+    it('successfully retrieves an existing account', async () => {
+      const account = await manager.getAccountByTransferPayee(
+        'existing-transfer-id',
+      );
 
       expect(account?.id).toEqual('id-test-transfer');
-
-    })
+    });
 
     it('ignores deleted and closed accounts', async () => {
-      const deleted = await manager.getAccountByTransferPayee('closed-transfer-id')
-      
+      const deleted = await manager.getAccountByTransferPayee(
+        'closed-transfer-id',
+      );
+
       expect(deleted).toBeUndefined();
 
-      const closed = await manager.getAccountByTransferPayee('closed-transfer-id')
-      
-      expect(closed).toBeUndefined();
-    })
+      const closed = await manager.getAccountByTransferPayee(
+        'closed-transfer-id',
+      );
 
-  })
-})
+      expect(closed).toBeUndefined();
+    });
+  });
+});
