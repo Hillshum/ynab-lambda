@@ -263,6 +263,12 @@ const ynab = {
               deleted: false,
             },
             {
+              id: 'hsa-transfer-id',
+              name: 'Transfer: HSA Cash',
+              transfer_account_id: 'fake-hsa-account',
+              deleted: false,
+            },
+            {
               id: 'nyc-food-week-id',
               name: 'NYC Food week',
               transfer_account_id: null,

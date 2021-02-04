@@ -76,7 +76,7 @@ const transactionsToUpload: SaveTransaction = {
       amount: -34350,
       memo: 'Regular deduction',
       category_id: 'hsa',
-      payee_name: 'HSA',
+      payee_id: 'hsa-transfer-id',
     },
     {
       amount: -893000,

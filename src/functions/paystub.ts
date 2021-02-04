@@ -13,6 +13,7 @@ import {
   BUDGET_ID,
   RBFCU_CHECKING_ID,
   GM_RETIREMENT_ACCOUNT_ID,
+  HSA_CASH_ACCOUNT_ID,
 } from '../utils/constants';
 
 type Direction = 'inflow' | 'outflow';
@@ -59,7 +60,7 @@ const transactionRows: TransactionDetails[] = [
   },
   {
     name: 'hsa',
-    payeeName: 'HSA',
+    payeeTransferId: HSA_CASH_ACCOUNT_ID,
     direction: 'outflow',
     categoryName: 'HSA Contributions',
     memo: 'Regular deduction',

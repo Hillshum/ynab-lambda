@@ -5,3 +5,4 @@ export const WITHHOLDINGS_ID = process.env.WITHHOLDINGS_ID || '';
 export const RBFCU_CHECKING_ID = process.env.RBFCU_CHECKING_ID || '';
 export const GM_RETIREMENT_ACCOUNT_ID =
   process.env.GM_RETIREMENT_ACCOUNT_ID || '';
+export const HSA_CASH_ACCOUNT_ID = process.env.HSA_CASH_ACCOUNT_ID ?? '';
