@@ -27,6 +27,23 @@ test('should correctly extract net pay', () => {
   expect(wrapper.getNetPay()).toBeCloseTo(2301.11, 2);
 });
 
+test('should correctly get employer contributions', () => {
+  expect(wrapper.getEmployerContributions()).toBeCloseTo(0, 2)
+})
+
+test('should correctly get medicare', () => {
+  expect(wrapper.getMedicare()).toBeCloseTo(-44.98, 2)
+})
+
+test('should correctly get SS taxes', () => {
+  expect(wrapper.getSS()).toBeCloseTo(-192.36, 2)
+})
+
+test('should correctly get income taxes', () => {
+  expect(wrapper.getIncomeTaxes()).toBeCloseTo(-441.24, 2)
+})
+
+
 xtest('should correctly throw if no match', () => {
   const faultyStub: unknown = 'afweawf';
   new PayStubWrapper(faultyStub as PayStub);

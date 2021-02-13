@@ -120,6 +120,37 @@ class PayStubWrapper {
 
     return bucket.amount;
   }
+
+  getEmployerContributions(): number {
+    const latest = this.getLatest();
+    const bucket = this.getBucketByLabel('Employer Contributions', latest);
+
+    return bucket.amount;
+  }
+
+  getMedicare(): number {
+    const taxes = this.getBucketByLabel('EE Taxes', this.getLatest());
+
+    const medicare = this.getWageTypeByLabel('TX EE Medicare Tax Federal', taxes);
+
+    return medicare.amount
+  }
+
+  getSS(): number {
+
+    const taxes = this.getBucketByLabel('EE Taxes', this.getLatest());
+    const wage = this.getWageTypeByLabel('TX EE Social Security Tax Federal', taxes);
+
+    return wage.amount;
+  }
+
+  getIncomeTaxes(): number {
+    const taxes = this.getBucketByLabel('EE Taxes', this.getLatest());
+    const wage = this.getWageTypeByLabel('TX Withholding Tax Federal', taxes);
+
+    return wage.amount;
+
+  }
 }
 
 export { PayStubWrapper };
