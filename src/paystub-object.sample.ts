@@ -454,7 +454,7 @@ const sample = {
               legacy_id: '8104',
               currency: '',
               id: '8104*RSP PRE-TAX BASIC',
-              label: '*RSP PRE-TAX BASIC',
+              label: 'RSP ROTH BASIC',
               percent: 0,
               YTDamount: -2873.86,
               order: 2,

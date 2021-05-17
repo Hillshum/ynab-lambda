@@ -106,7 +106,7 @@ class PayStubWrapper {
   getRetirement(): number {
     const preTax = this.getPreTax();
 
-    const label = '*RSP PRE-TAX BASIC';
+    const label = 'RSP ROTH BASIC';
 
     const wage = this.getWageTypeByLabel(label, preTax);
 
