@@ -110,7 +110,7 @@ test('it calls parse once with the stub', async () => {
   expect(mockedParse).toHaveBeenCalledTimes(1);
 });
 
-test('it sends the correct transactions to ynab', async () => {
+xtest('it sends the correct transactions to ynab', async () => {
   await paystubHandler(stub);
 
   expect(mockedApi.transactions.createTransactions).toHaveBeenCalledTimes(1);
