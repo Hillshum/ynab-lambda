@@ -83,6 +83,13 @@ class PayStubWrapper {
     );
   }
 
+  getPostTax(): Bucket {
+    return this.getBucketByLabel(
+      'EE Benefits Post-Tax Deductions',
+      this.getLatest(),
+    );
+  }
+
   getHSA(): number {
     const preTax = this.getPreTax();
 
@@ -104,11 +111,11 @@ class PayStubWrapper {
   }
 
   getRetirement(): number {
-    const preTax = this.getPreTax();
+    const postTax = this.getPostTax();
 
     const label = 'RSP ROTH BASIC';
 
-    const wage = this.getWageTypeByLabel(label, preTax);
+    const wage = this.getWageTypeByLabel(label, postTax);
 
     return wage.amount;
   }

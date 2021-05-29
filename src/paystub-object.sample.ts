@@ -81,6 +81,28 @@ const sample = {
       isSigned: '',
       buckets: [
         {
+          "amount": -122.76,
+          "wagetypes": [
+            {
+              "amount": -122.76,
+              "hours": 0,
+              "rate": 0,
+              "retro": false,
+              "legacy_id": "8107",
+              "currency": "",
+              "id": "8107RSP ROTH BASIC",
+              "label": "RSP ROTH BASIC",
+              "percent": 0,
+              "YTDamount": -122.76,
+              "order": 0
+            }
+          ],
+          "id": "B04",
+          "net": false,
+          "YTDamount": -256.34,
+          "order": "004"
+        },
+        {
           amount: -662.23,
           wagetypes: [
             {
@@ -156,19 +178,6 @@ const sample = {
               percent: 0,
               YTDamount: -379.5,
               order: 1,
-            },
-            {
-              amount: -122.76,
-              hours: 0,
-              rate: 0,
-              retro: false,
-              legacy_id: '8104',
-              currency: '',
-              id: '8104*RSP PRE-TAX BASIC',
-              label: '*RSP PRE-TAX BASIC',
-              percent: 0,
-              YTDamount: -2751.1,
-              order: 2,
             },
           ],
           id: 'B03',
@@ -370,6 +379,28 @@ const sample = {
       isSigned: '',
       buckets: [
         {
+          "amount": -122.76,
+          "wagetypes": [
+            {
+              "amount": -122.76,
+              "hours": 0,
+              "rate": 0,
+              "retro": false,
+              "legacy_id": "8107",
+              "currency": "",
+              "id": "8107RSP ROTH BASIC",
+              "label": "RSP ROTH BASIC",
+              "percent": 0,
+              "YTDamount": -245.52,
+              "order": 0
+            }
+          ],
+          "id": "B04",
+          "net": false,
+          "YTDamount": -256.34,
+          "order": "004"
+        },
+        {
           amount: -678.58,
           wagetypes: [
             {
@@ -445,19 +476,6 @@ const sample = {
               percent: 0,
               YTDamount: -396,
               order: 1,
-            },
-            {
-              amount: -122.76,
-              hours: 0,
-              rate: 0,
-              retro: false,
-              legacy_id: '8104',
-              currency: '',
-              id: '8104*RSP PRE-TAX BASIC',
-              label: 'RSP ROTH BASIC',
-              percent: 0,
-              YTDamount: -2873.86,
-              order: 2,
             },
           ],
           id: 'B03',
