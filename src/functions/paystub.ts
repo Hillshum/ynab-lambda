@@ -46,7 +46,7 @@ const transactionRows: TransactionDetails[] = [
   {
     name: 'gross',
     payeeName: 'General Motors',
-    categoryName: 'Inflow: To be Budgeted',
+    categoryName: 'Inflow: Ready to Assign',
     direction: 'inflow',
     memo: 'Gross Pay',
   },
