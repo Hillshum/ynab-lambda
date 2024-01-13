@@ -12,7 +12,7 @@ mockedParse.mockImplementation(() => {
     gross: 515,
     taxes: -35.335,
     hsa: -34.35,
-    health: -893,
+    lfsa: -2,
     retirement: -122.76,
     net: 83,
     retirement_gm: 0,
@@ -76,12 +76,6 @@ const transactionsToUpload: SaveTransaction = {
       memo: 'Regular deduction',
       category_id: 'hsa',
       payee_id: 'hsa-transfer-id',
-    },
-    {
-      amount: -893000,
-      memo: 'Health premium',
-      payee_name: 'Aetna',
-      category_id: 'health',
     },
     {
       amount: 245520,

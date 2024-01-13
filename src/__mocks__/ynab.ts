@@ -92,7 +92,7 @@ const ynab = {
                     {
                       id: 'INFLOW-CATEGORY',
                       category_group_id: 'INTERNAL-MASTER',
-                      name: 'Inflows',
+                      name: 'Inflow: Ready to Assign',
                       budgeted: 0,
                       activity: 335,
                       balance: 353,

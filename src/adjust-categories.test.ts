@@ -73,7 +73,7 @@ test('should update categories with correct amounts', async () => {
       },
     ];
   });
-  expect(apiMock.categories.updateMonthCategory).toBeCalledTimes(
+  expect(apiMock.categories.updateMonthCategory).toHaveBeenCalledTimes(
     transactions.length,
   );
   // expect(apiMock.categories.updateMonthCategory.mock.calls).toEqual(
