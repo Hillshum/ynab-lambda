@@ -87,7 +87,7 @@ const calculatedTransactions: CalculatedTransaction[] = [
       categoryName: '401(k) contributions',
       memo: '401(k) contribution',
     },
-    calculate: (amounts) => amounts.retirement * -2,
+    calculate: (amounts) => amounts.gross * .1,
   },
   {
     details: {
@@ -97,7 +97,7 @@ const calculatedTransactions: CalculatedTransaction[] = [
       categoryName: '401(k) contributions',
       memo: 'Retirement savings',
     },
-    calculate: (amounts) => amounts.retirement * 3,
+    calculate: (amounts) => amounts.gross * -.16,
   },
 ];
 

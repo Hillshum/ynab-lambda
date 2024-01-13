@@ -85,13 +85,13 @@ const transactionsToUpload: SaveTransaction = {
       payee_id: 'hsa-transfer-id',
     },
     {
-      amount: 245520,
+      amount: 51500,
       payee_name: 'General Motors',
       memo: '401(k) contribution',
       category_id: '401k',
     },
     {
-      amount: -368280,
+      amount: -82400,
       payee_id: 'gm-retirement-transfer-id',
       memo: 'Retirement savings',
       category_id: '401k',
