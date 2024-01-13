@@ -1,11 +1,10 @@
 import PayeeManager from './payee-manager';
 import { API } from 'ynab';
 import * as constants from '../constants';
-import { mocked } from 'ts-jest/utils';
 
 const api: API = new API(constants.ACCESS_TOKEN);
 
-mocked(api);
+jest.mocked(api);
 let manager: PayeeManager;
 
 beforeEach(() => {

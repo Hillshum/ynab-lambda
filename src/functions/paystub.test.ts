@@ -1,4 +1,3 @@
-import { mocked } from 'ts-jest/utils';
 
 import { parsePaystub } from '../parse-paystub';
 
@@ -6,7 +5,7 @@ import { BUDGET_ID, RBFCU_CHECKING_ID } from '../utils/constants';
 
 jest.mock('../parse-paystub');
 
-const mockedParse = mocked(parsePaystub);
+const mockedParse = jest.mocked(parsePaystub);
 
 mockedParse.mockImplementation(() => {
   return {
@@ -28,9 +27,9 @@ jest.mock('../utils/api/api.ts');
 
 jest.mock('../adjust-categories');
 
-const mockedAdjust = mocked(adjustCategories);
+const mockedAdjust = jest.mocked(adjustCategories);
 
-const mockedApi = mocked(api, false);
+const mockedApi = jest.mocked(api, {shallow: false});
 
 import paystubHandler from './paystub';
 import { SaveTransaction } from 'ynab';
