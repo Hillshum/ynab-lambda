@@ -65,13 +65,6 @@ const transactionRows: TransactionDetails[] = [
     categoryName: 'HSA Contributions',
     memo: 'Regular deduction',
   },
-  {
-    name: 'health',
-    payeeName: 'Aetna',
-    categoryName: 'Health Coverage',
-    direction: 'outflow',
-    memo: 'Health premium',
-  },
 ];
 
 interface CalculatedTransaction {
