@@ -128,6 +128,16 @@ const ynab = {
                       deleted: false,
                     },
                     {
+                      id: 'lfsa',
+                      name: 'LFSA',
+                      category_group_id: 'OTHER-CATEGORY-GROUP',
+                      budgeted: 0,
+                      activity: 335,
+                      balance: 353,
+                      hidden: false,
+                      deleted: false,
+                    },
+                    {
                       id: 'taxes',
                       name: 'Taxes',
                       category_group_id: 'OTHER-CATEGORY-GROUP',

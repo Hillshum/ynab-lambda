@@ -50,13 +50,19 @@ const transactionRows: TransactionDetails[] = [
     direction: 'inflow',
     memo: 'Gross Pay',
   },
-
   {
     name: 'taxes',
     payeeName: 'Internal Revenue Service',
     direction: 'outflow',
     categoryName: 'Taxes',
     memo: 'All deducted taxes',
+  },
+  {
+    name: 'lfsa',
+    payeeName: 'LFSA',
+    categoryName: 'LFSA',
+    direction: 'outflow',
+    memo: 'LFSA contribution',
   },
   {
     name: 'hsa',

@@ -34,6 +34,8 @@ const mockedApi = jest.mocked(api, {shallow: false});
 import paystubHandler from './paystub';
 import { SaveTransaction } from 'ynab';
 
+// this stub here is not actually parsed, we just check that the mock gets it
+// the values don't need to be correct
 const stub = `
  Gross Pay$2,351.80
  Earnings$2,351.80
@@ -41,8 +43,7 @@ const stub = `
  EE Benefits Pre-tax Deductions-$119.52
 *HEALTH SAVINGS ACCT
 -$8.95
-*HEALTH CARE
--$16.50
+LFSA -$16.50
 *RSP PRE-TAX BASIC
 -$122.76
  EE Benefits Post-Tax Deductions$0.00
@@ -70,6 +71,12 @@ const transactionsToUpload: SaveTransaction = {
       memo: 'All deducted taxes',
       category_id: 'taxes',
       payee_name: 'Internal Revenue Service',
+    },
+    {
+      amount: -2000,
+      memo: 'LFSA contribution',
+      category_id: 'lfsa',
+      payee_name: 'LFSA',
     },
     {
       amount: -34350,
@@ -103,7 +110,7 @@ test('it calls parse once with the stub', async () => {
   expect(mockedParse).toHaveBeenCalledTimes(1);
 });
 
-xtest('it sends the correct transactions to ynab', async () => {
+test('it sends the correct transactions to ynab', async () => {
   await paystubHandler(stub);
 
   expect(mockedApi.transactions.createTransactions).toHaveBeenCalledTimes(1);
