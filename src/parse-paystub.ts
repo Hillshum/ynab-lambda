@@ -17,6 +17,7 @@ export type TransactionType =
   | 'lfsa'
   | 'retirement'
   | 'net'
+  | 'shared_budget_contribution'
   | 'retirement_gm'
   | 'retirement_total';
 

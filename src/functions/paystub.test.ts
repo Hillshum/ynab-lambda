@@ -15,6 +15,7 @@ mockedParse.mockImplementation(() => {
     lfsa: -2,
     retirement: -122.76,
     net: 83,
+    shared_budget_contribution: 0,
     retirement_gm: 0,
     retirement_total: 0,
   };
@@ -33,6 +34,7 @@ const mockedApi = jest.mocked(api, {shallow: false});
 
 import paystubHandler from './paystub';
 import { SaveTransaction } from 'ynab';
+import { SHARED_BUDGET_CONTRIBUTION } from '../constants';
 
 // this stub here is not actually parsed, we just check that the mock gets it
 // the values don't need to be correct
@@ -95,6 +97,12 @@ const transactionsToUpload: SaveTransaction = {
       payee_id: 'gm-retirement-transfer-id',
       memo: 'Retirement savings',
       category_id: '401k',
+    },
+    {
+      amount: SHARED_BUDGET_CONTRIBUTION * 1000,
+      payee_name: 'Shared Budget',
+      memo: 'Shared Budget Contribution',
+      category_id: 'shared-budget-contribution',
     },
   ],
 };

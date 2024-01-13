@@ -2,6 +2,8 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import { parsePaystub, TransactionType } from '../parse-paystub';
 import * as ynab from 'ynab';
 
+import { SHARED_BUDGET_CONTRIBUTION } from '../constants';
+
 import {
   api,
   payeeManager,
@@ -98,6 +100,16 @@ const calculatedTransactions: CalculatedTransaction[] = [
       memo: 'Retirement savings',
     },
     calculate: (amounts) => amounts.gross * -.16,
+  },
+  {
+    details: {
+      name: 'shared_budget_contribution',
+      payeeName: 'Shared Budget',
+      direction: 'outflow',
+      categoryName: 'Joint Budget',
+      memo: 'Shared Budget Contribution',
+    },
+    calculate: () => SHARED_BUDGET_CONTRIBUTION, 
   },
 ];
 

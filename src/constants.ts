@@ -1,0 +1,1 @@
+export const SHARED_BUDGET_CONTRIBUTION = 1766.83;

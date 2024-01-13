@@ -148,6 +148,16 @@ const ynab = {
                       deleted: false,
                     },
                     {
+                      id: 'shared-budget-contribution',
+                      name: 'Joint Budget',
+                      category_group_id: 'OTHER-CATEGORY-GROUP',
+                      budgeted: 0,
+                      activity: 335,
+                      balance: 353,
+                      hidden: false,
+                      deleted: false,
+                    },
+                    {
                       id: '401k',
                       name: '401(k) contributions',
                       category_group_id: 'OTHER-CATEGORY-GROUP',
