@@ -1,25 +1,43 @@
 class Cache<T, K=void> {
-  private store?: T;
   private promise?: Promise<T>;
   getter: (K) => Promise<T>;
+  timestamp = 0;
+  ttlSecs;
+  isSettled = false;
 
-  // TODO: Fix this to use better types
-  constructor(getter: (K) => Promise<T>) {
+
+  constructor(getter: (K) => Promise<T>, ttlSecs = 300) {
     this.getter = getter;
+    this.ttlSecs = ttlSecs;
   }
 
   get(arg: K): Promise<T> {
-    if (this.store) {
-      return Promise.resolve(this.store);
-    }
 
-    if (this.promise) {
+    // promise is currently pending
+    if (this.promise && !this.isSettled) {
       return this.promise;
     }
 
-    this.promise = this.getter(arg);
 
-    this.promise.then((data) => (this.store = data));
+    const timeDelta = Date.now() - this.timestamp
+    // promise is settled and ttl has not expired
+    if (this.promise && timeDelta < this.ttlSecs * 1000) {
+      console.log('timeDelta', timeDelta )
+      return this.promise;
+    }
+
+    // promise is settled and ttl has expired
+    // or promise is undefined
+    this.promise = this.getter(arg)
+    this.isSettled = false;
+    this.timestamp = 0;
+    this.promise.then(()=>{
+      this.timestamp = Date.now();
+      this.isSettled = true;
+    }).catch(()=> {
+      this.isSettled = true;
+      this.promise = undefined;
+    })
 
     return this.promise;
   }
