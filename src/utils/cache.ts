@@ -1,15 +1,14 @@
-class Cache<T> {
+class Cache<T, K=void> {
   private store?: T;
   private promise?: Promise<T>;
-  getter: () => Promise<T>;
+  getter: (K) => Promise<T>;
 
   // TODO: Fix this to use better types
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(getter: (...args: any) => Promise<T>) {
+  constructor(getter: (K) => Promise<T>) {
     this.getter = getter;
   }
 
-  get(): Promise<T> {
+  get(arg: K): Promise<T> {
     if (this.store) {
       return Promise.resolve(this.store);
     }
@@ -18,7 +17,7 @@ class Cache<T> {
       return this.promise;
     }
 
-    this.promise = this.getter();
+    this.promise = this.getter(arg);
 
     this.promise.then((data) => (this.store = data));
 
