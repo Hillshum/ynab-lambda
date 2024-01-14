@@ -10,10 +10,10 @@ const mockedParse = jest.mocked(parsePaystub);
 mockedParse.mockImplementation(() => {
   return {
     gross: 515,
-    taxes: -35.335,
-    hsa: -34.35,
-    lfsa: -2,
-    retirement: -122.76,
+    taxes: 35.335,
+    hsa: 34.35,
+    lfsa: 2,
+    retirement: 122.76,
     net: 83,
     shared_budget_contribution: 0,
     retirement_gm: 0,
@@ -58,7 +58,7 @@ LFSA -$16.50
 const transactionsToUpload: SaveTransaction = {
   account_id: RBFCU_CHECKING_ID,
   date: '2020-03-21',
-  amount: 83000,
+  amount: -1354415,
   memo: 'Net paycheck',
   payee_name: 'General Motors',
   subtransactions: [
@@ -99,7 +99,7 @@ const transactionsToUpload: SaveTransaction = {
       category_id: '401k',
     },
     {
-      amount: SHARED_BUDGET_CONTRIBUTION * 1000,
+      amount: SHARED_BUDGET_CONTRIBUTION * -1000,
       payee_name: 'Shared Budget',
       memo: 'Shared Budget Contribution',
       category_id: 'shared-budget-contribution',

@@ -1,4 +1,3 @@
-import { APIGatewayProxyResult } from 'aws-lambda';
 import { parsePaystub, TransactionType } from '../parse-paystub';
 import * as ynab from 'ynab';
 
@@ -19,6 +18,11 @@ import {
 } from '../utils/constants';
 
 type Direction = 'inflow' | 'outflow';
+
+const directionMultipliers = {
+  inflow: 1,
+  outflow: -1,
+};
 
 interface TransactionDetailsRaw {
   name: TransactionType;
@@ -62,7 +66,7 @@ const transactionRows: TransactionDetails[] = [
   {
     name: 'lfsa',
     payeeName: 'LFSA',
-    categoryName: 'LFSA',
+    categoryName: 'LFSA Contributions',
     direction: 'outflow',
     memo: 'LFSA contribution',
   },
@@ -106,135 +110,118 @@ const calculatedTransactions: CalculatedTransaction[] = [
       name: 'shared_budget_contribution',
       payeeName: 'Shared Budget',
       direction: 'outflow',
-      categoryName: 'Joint Budget',
+      categoryName: 'Joint budget',
       memo: 'Shared Budget Contribution',
     },
-    calculate: () => SHARED_BUDGET_CONTRIBUTION, 
+    calculate: () => SHARED_BUDGET_CONTRIBUTION * -1, 
   },
 ];
 
-export const paystubHandler = async (
-  stub: string,
-): Promise<APIGatewayProxyResult> => {
-  try {
-    const transactionsToAdjust: ynab.SaveSubTransaction[] = [];
+export const paystubHandler = async ( stub: string,)=> {
 
-    const amounts = parsePaystub(stub);
+  const transactionsToAdjust: ynab.SaveSubTransaction[] = [];
 
-    const newTransactions: ynab.SaveSubTransaction[] = await Promise.all(
-      transactionRows.map(async (transaction) => {
-        const preparedTransaction: ynab.SaveSubTransaction = {
-          amount: Math.round(amounts[transaction.name] * 1000),
-          memo: transaction.memo,
-        };
+  const amounts = parsePaystub(stub);
 
-        if (transaction.categoryName) {
-          preparedTransaction.category_id = await categoryManager.getCategoryIdByName(
-            transaction.categoryName,
-          );
+  const newTransactions: ynab.SaveSubTransaction[] = await Promise.all(
+    transactionRows.map(async (transaction) => {
+      const directionMultiplier = directionMultipliers[transaction.direction];
+      const preparedTransaction: ynab.SaveSubTransaction = {
+        amount: Math.round(amounts[transaction.name] * 1000 * directionMultiplier),
+        memo: transaction.memo,
+      };
+
+      if (transaction.categoryName) {
+        preparedTransaction.category_id = await categoryManager.getCategoryIdByName(
+          transaction.categoryName,
+        );
+      }
+
+      if (isTransfer(transaction)) {
+        preparedTransaction.payee_id = await payeeManager.getTransferPayee(
+          transaction.payeeTransferId,
+        );
+
+        const account = await accountManager.getAccountByTransferPayee(
+          transaction.payeeTransferId,
+        );
+        if (account && !account.on_budget) {
+          transactionsToAdjust.push(preparedTransaction);
         }
+      }
 
-        if (isTransfer(transaction)) {
-          preparedTransaction.payee_id = await payeeManager.getTransferPayee(
-            transaction.payeeTransferId,
-          );
+      if (isNamedPayee(transaction)) {
+        preparedTransaction.payee_name = transaction.payeeName;
 
-          const account = await accountManager.getAccountByTransferPayee(
-            transaction.payeeTransferId,
-          );
-          if (account && !account.on_budget) {
-            transactionsToAdjust.push(preparedTransaction);
-          }
+        if (transaction.direction === 'outflow') {
+          transactionsToAdjust.push(preparedTransaction);
         }
+      }
 
-        if (isNamedPayee(transaction)) {
-          preparedTransaction.payee_name = transaction.payeeName;
+      return preparedTransaction;
+    }),
+  );
 
-          if (transaction.direction === 'outflow') {
-            transactionsToAdjust.push(preparedTransaction);
-          }
+
+  const calculated: ynab.SaveSubTransaction[] = await Promise.all(
+    calculatedTransactions.map(async (transaction) => {
+      const preparedTransaction: ynab.SaveSubTransaction = {
+        amount: Math.round(transaction.calculate(amounts) * 1000),
+        memo: transaction.details.memo,
+      };
+
+      if (transaction.details.categoryName) {
+        preparedTransaction.category_id = await categoryManager.getCategoryIdByName(
+          transaction.details.categoryName,
+        );
+      }
+
+      if (isTransfer(transaction.details)) {
+        preparedTransaction.payee_id = await payeeManager.getTransferPayee(
+          transaction.details.payeeTransferId,
+        );
+
+        const account = await accountManager.getAccountByTransferPayee(
+          preparedTransaction.payee_id,
+        );
+        if (account && !account.on_budget) {
+          transactionsToAdjust.push(preparedTransaction);
         }
+      }
 
-        return preparedTransaction;
-      }),
-    );
+      if (isNamedPayee(transaction.details)) {
+        preparedTransaction.payee_name = transaction.details.payeeName;
 
-    const calculated: ynab.SaveSubTransaction[] = await Promise.all(
-      calculatedTransactions.map(async (transaction) => {
-        const preparedTransaction: ynab.SaveSubTransaction = {
-          amount: Math.round(transaction.calculate(amounts) * 1000),
-          memo: transaction.details.memo,
-        };
-
-        if (transaction.details.categoryName) {
-          preparedTransaction.category_id = await categoryManager.getCategoryIdByName(
-            transaction.details.categoryName,
-          );
+        if (transaction.details.direction === 'outflow') {
+          transactionsToAdjust.push(preparedTransaction);
         }
+      }
 
-        if (isTransfer(transaction.details)) {
-          preparedTransaction.payee_id = await payeeManager.getTransferPayee(
-            transaction.details.payeeTransferId,
-          );
+      return preparedTransaction;
+    }),
+  );
+  const subtransactions = [...newTransactions, ...calculated]
+  const total = subtransactions.reduce((a,b)=>a+b.amount, 0)
+  const parentTransaction: ynab.SaveTransaction = {
+    payee_name: 'General Motors',
+    memo: 'Net paycheck',
+    amount: total,
+    date: ynab.utils.getCurrentDateInISOFormat(),
+    account_id: RBFCU_CHECKING_ID,
+    subtransactions,
+  };
 
-          const account = await accountManager.getAccountByTransferPayee(
-            preparedTransaction.payee_id,
-          );
-          if (account && !account.on_budget) {
-            transactionsToAdjust.push(preparedTransaction);
-          }
-        }
 
-        if (isNamedPayee(transaction.details)) {
-          preparedTransaction.payee_name = transaction.details.payeeName;
+  console.log(
+    `about to create new transactions ${JSON.stringify(parentTransaction)}`,
+  );
+  await api.transactions.createTransactions(BUDGET_ID, {
+    transaction: parentTransaction,
+  });
 
-          if (transaction.details.direction === 'outflow') {
-            transactionsToAdjust.push(preparedTransaction);
-          }
-        }
+  console.log(`about to adjust categories ${transactionsToAdjust}`);
+  // await adjustCategories(transactionsToAdjust);
 
-        return preparedTransaction;
-      }),
-    );
-
-    const parentTransaction: ynab.SaveTransaction = {
-      payee_name: 'General Motors',
-      memo: 'Net paycheck',
-      amount: Math.round(amounts.net * 1000),
-      date: ynab.utils.getCurrentDateInISOFormat(),
-      account_id: RBFCU_CHECKING_ID,
-      subtransactions: [...newTransactions, ...calculated],
-    };
-
-    // const transactionsToCreate = [...newTransactions, ...calculated];
-
-    console.log(
-      `about to create new transactions ${JSON.stringify(parentTransaction)}`,
-    );
-    await api.transactions.createTransactions(BUDGET_ID, {
-      transaction: parentTransaction,
-    });
-
-    console.log(`about to adjust categories ${transactionsToAdjust}`);
-    // await adjustCategories(transactionsToAdjust);
-
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: 'success',
-    };
-  } catch (e) {
-    console.error(e);
-    return {
-      statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: 'error',
-    };
-  }
 };
 
 export default paystubHandler;

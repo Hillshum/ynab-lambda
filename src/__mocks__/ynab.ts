@@ -129,7 +129,7 @@ const ynab = {
                     },
                     {
                       id: 'lfsa',
-                      name: 'LFSA',
+                      name: 'LFSA Contributions',
                       category_group_id: 'OTHER-CATEGORY-GROUP',
                       budgeted: 0,
                       activity: 335,
@@ -149,7 +149,7 @@ const ynab = {
                     },
                     {
                       id: 'shared-budget-contribution',
-                      name: 'Joint Budget',
+                      name: 'Joint budget',
                       category_group_id: 'OTHER-CATEGORY-GROUP',
                       budgeted: 0,
                       activity: 335,

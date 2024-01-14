@@ -1,21 +1,36 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import { handler as venmo } from './functions/venmo';
 import paystubHandler from './functions/paystub';
 
-import lambdaWrapper from './utils/lambda-wrapper';
-const paystub = lambdaWrapper(paystubHandler)
 const port = process.env.PORT || 3000;
 
 const app = express();
 
+app.use(bodyParser.text())
+
 // Venmo endpoint
-app.post('/venmo', venmo);
+// app.post('/venmo', venmo);
 
 // Paystub endpoint
-app.post('/paystub', paystub );
+app.post('/paystub', (req, res, next)=> {
+    const stub = req.body;
+    console.log(stub)
+    paystubHandler(stub).then(()=>res.sendStatus(200))
+    .catch(()=>{
+        console.log('cauthg error in paystub handler')
+        res.sendStatus(500)
+        // next();
+    });
+} );
 
 app.listen(port, () => {
     console.log('Server is running on port 3000');
 });
 
-export { paystub, venmo}
+
+process.on('unhandledRejection', function (err:any) {
+    console.log('caught unhandled rejection')
+    console.log(err);
+})
+// export { paystub, venmo}
