@@ -1,4 +1,3 @@
-import { PayStubWrapper } from './paystub-object';
 
 const regex = {
   gross: /^\s*Gross Pay\$(.+)$/m,
