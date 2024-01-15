@@ -14,11 +14,7 @@ app.post('/paystub', (req, res, next)=> {
     const stub = req.body;
     console.log(stub)
     paystubHandler(stub).then(()=>res.sendStatus(200))
-    .catch(()=>{
-        console.log('cauthg error in paystub handler')
-        res.sendStatus(500)
-        // next();
-    });
+    .catch(next);
 } );
 
 app.listen(port, () => {
