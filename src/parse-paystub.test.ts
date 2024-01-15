@@ -3,23 +3,21 @@
 import { parsePaystub } from './parse-paystub'
 
 const stub = `
-From: January 1, 2024 To: January 15, 2024
+anuary 12, 2024
+ From: January 1, 2024 To: January 15, 2024
 
-Gross Pay$4,218.89
-Earnings$4,218.89
-EE Taxes-$879.36
-EE Benefits Pre-tax Deductions-$112.42
+ Gross Pay$4,218.89
+ Earnings$4,218.89
+ EE Taxes-$879.36
+ EE Benefits Pre-tax Deductions-$112.42
 *FSA HEALTH CARE
 -$2.00
 *HEALTH SAVINGS ACCT
 -$110.42
-EE Benefits Post-Tax Deductions-$253.13
-Employee Deductions$0.00
-Net Pay$2,973.98
-Employer Contributions$5.88
-Federal Taxable Wages$4,112.35
--$112.42
-EE Benefits Pre-tax Deductions
+ EE Benefits Post-Tax Deductions-$253.13
+ Employee Deductions$0.00
+ Net Pay$2,973.98
+ Employer Contributions$5.88
 
  `
 test('should not throw', () => {

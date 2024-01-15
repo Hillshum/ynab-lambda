@@ -1,12 +1,12 @@
 import { PayStubWrapper } from './paystub-object';
 
 const regex = {
-  gross: /^Gross Pay\$(.+)$/m,
-  taxes: /^EE Taxes-\$(.+)$/m,
-  hsa: /^\*HEALTH SAVINGS ACCT\n-\$(.+)$/m,
-  lfsa: /^\*FSA HEALTH CARE\n-\$(.+)$/m,
-  retirement: /^EE Benefits Post-Tax Deductions-\$(.+)$$/m,
-  net: /^Net Pay\$(.+)$/m,
+  gross: /^\s*Gross Pay\$(.+)$/m,
+  taxes: /^\s*EE Taxes-\$(.+)$/m,
+  hsa: /^\s*\*HEALTH SAVINGS ACCT\n-\$(.+)$/m,
+  lfsa: /^\s*\*FSA HEALTH CARE\n-\$(.+)$/m,
+  retirement: /^\s*EE Benefits Post-Tax Deductions-\$(.+)$$/m,
+  net: /^\s*Net Pay\$(.+)$/m,
 
 }
 
