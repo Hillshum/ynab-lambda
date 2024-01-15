@@ -1,4 +1,3 @@
-import { resolve } from 'path';
 import Cache from './cache';
 
 const cachedResult = 42;
@@ -34,7 +33,6 @@ describe('Cache', () => {
     await cache.get();
     await cache.get();
     await new Promise(resolve => setTimeout(resolve, 2000))
-    // cache.timestamp = 0;
     await cache.get();
 
     expect(getter).toHaveBeenCalledTimes(2);

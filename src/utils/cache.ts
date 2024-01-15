@@ -22,7 +22,6 @@ class Cache<T, K=void> {
     const timeDelta = Date.now() - this.timestamp
     // promise is settled and ttl has not expired
     if (this.promise && timeDelta < this.ttlSecs * 1000) {
-      console.log('timeDelta', timeDelta )
       return this.promise;
     }
 
