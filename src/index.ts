@@ -12,7 +12,7 @@ app.use(bodyParser.text())
 app.use(cors())
 
 // Paystub endpoint
-app.post('/paystub', (req, res, next)=> {
+app.post('/api/paystub', (req, res, next)=> {
     const stub = req.body;
     console.log(stub)
     paystubHandler(stub).then(()=>res.sendStatus(200))

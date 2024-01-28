@@ -6,7 +6,7 @@
   "scripts": {
     "package": "yarn run build && zip -r ./dist/package.zip ./dist/index.js",
     "test": "jest",
-    "build": "webpack --config=webpack.config.js"
+    "build": "tsc"
   },
   "dependencies": {
     "@tsconfig/node20": "^20.1.2",
