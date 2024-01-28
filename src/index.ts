@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import paystubHandler from './functions/paystub';
+import cors from 'cors';
 
 const port = process.env.PORT || 3000;
 
@@ -8,6 +9,7 @@ const app = express();
 
 app.use(bodyParser.text())
 
+app.use(cors())
 
 // Paystub endpoint
 app.post('/paystub', (req, res, next)=> {
