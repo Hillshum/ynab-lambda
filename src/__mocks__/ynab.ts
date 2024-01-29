@@ -7,6 +7,7 @@ import {
   Account,
 } from 'ynab';
 const ynab = {
+  Account, // Make some types available in the test
   utils: {
     getCurrentDateInISOFormat: () => '2020-03-21',
   },
@@ -62,6 +63,30 @@ const ynab = {
               cleared_balance: 35,
               transfer_payee_id: 'gm-retirement-transfer-id',
               type: Account.TypeEnum.Checking,
+              deleted: false,
+            },
+            {
+              id: 'credit-card-id',
+              name: 'Credit Card',
+              on_budget: true,
+              closed: false,
+              balance: 2503540,
+              uncleared_balance: 3503,
+              cleared_balance: 3533,
+              transfer_payee_id: 'credit-card-transfer-id',
+              type: Account.TypeEnum.CreditCard,
+              deleted: false,
+            },
+            {
+              id: 'credit-card-other-id',
+              name: 'Another Credit Card',
+              on_budget: true,
+              closed: false,
+              balance: 2583520,
+              uncleared_balance: 3503,
+              cleared_balance: 3533,
+              transfer_payee_id: 'another-credit-card-transfer-id',
+              type: Account.TypeEnum.CreditCard,
               deleted: false,
             },
           ];

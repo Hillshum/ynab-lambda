@@ -1,3 +1,4 @@
+import {Account } from 'ynab';
 import AccountManager from './account-manager';
 
 // jest.mock('../cache', ()=> {
@@ -21,6 +22,26 @@ describe('AccountManager', () => {
     await manager.getAccountByTransferPayee('existing-transfer-id');
     // expect(MockedCache.mock.instances[0].get).toBeCalledTimes(3);
   });
+
+  describe('getAllCreditCards', () => {
+    let manager: AccountManager;
+    
+    beforeEach(() => {
+      manager = new AccountManager();
+    });
+
+    it('returns the two mocked credit cards', async () => {
+      const creditCards = await manager.getAllCreditCards();
+      expect(creditCards.filter(account=> account.type === Account.TypeEnum.CreditCard)).toHaveLength(2); 
+    });
+
+    it('ignores deleted and closed accounts', async () => {
+      const creditCards = await manager.getAllCreditCards();
+      expect(creditCards.filter(account=> account.deleted || account.closed)).toHaveLength(0);
+    });
+
+
+  })
 
   describe('getAcountByTransferPayee', () => {
     let manager: AccountManager;

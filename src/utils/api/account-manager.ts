@@ -12,6 +12,14 @@ class AccountManager {
     });
   }
 
+  async getAllCreditCards(): Promise<Account[]> {
+    const accounts = await this.cache.get();
+
+    return accounts.data.accounts.filter((account) => {
+      return account.type === Account.TypeEnum.CreditCard && !account.closed && !account.deleted;
+    });
+  }
+
   async getAccountByTransferPayee(
     transerPayeeId: string,
   ): Promise<Account | undefined> {

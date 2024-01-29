@@ -17,7 +17,16 @@ app.post('/api/paystub', (req, res, next)=> {
     console.log(stub)
     paystubHandler(stub).then(()=>res.sendStatus(200))
     .catch(next);
-} );
+});
+
+app.get('/api/credicard-adjust', (req, res, next)=> {
+    
+    // return rta, sum of cc transfers, cc budget category
+});
+
+app.post('/api/creditcard-adjust/:id', (req, res, next)=> {
+    // move from rta to cc budget category
+})
 
 app.listen(port, () => {
     console.log('Server is running on port 3000');
