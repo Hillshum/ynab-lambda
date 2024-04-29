@@ -14,6 +14,20 @@ export default class CategoryManager {
     this.budgetId = budgetId;
   }
 
+  async getCCPaymentCategoryByCC(creditCardName: string) {
+    const response = await this.cache.get();
+
+    const ccGroup = response.data.category_groups.find(
+      (group) => group.name === 'Credit Card Payments',
+    );
+    const category = ccGroup?.categories.find((category) => {
+      return category.name.includes(creditCardName);
+    })
+    if (!category) {
+      throw new Error(`Unable to find category for credit card ${creditCardName}`);
+    }
+    return category;
+  }
   async getCategoryIdByName(categoryName: string): Promise<string> {
     const response = await this.cache.get();
 
