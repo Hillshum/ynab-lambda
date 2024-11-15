@@ -28,6 +28,11 @@ app.post('/api/creditcard-adjust/:id', (req, res, next)=> {
     // move from rta to cc budget category
 })
 
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.sendStatus(500);
+})
+
 app.listen(port, () => {
     console.log('Server is running on port 3000');
 });
